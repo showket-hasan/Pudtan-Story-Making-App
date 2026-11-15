@@ -1,0 +1,2942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Story Plot Architect — Grade 5 Bilingual Storybook Studio</title>
+  <style>
+    :root {
+      --font-academic: 'Times New Roman', Times, 'Thonburi', 'Leelawadee UI', 'Noto Serif Thai', 'Tahoma', serif;
+
+      --bg-page: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F3EFE6;
+      --border-hairline: #DED7C8;
+      --border-strong: #B8AE9B;
+
+      --ink-primary: #1B2430;
+      --ink-secondary: #4A5568;
+      --ink-muted: #64748B;
+
+      /* Vivid Literary Jewel Palette per Act */
+      --act1: #1D4ED8;
+      --act1-soft: #EFF6FF;
+      --act1-border: #93C5FD;
+
+      --act2: #E11D48;
+      --act2-soft: #FFF1F2;
+      --act2-border: #FDA4AF;
+
+      --act3: #059669;
+      --act3-soft: #ECFDF5;
+      --act3-border: #6EE7B7;
+
+      --act4: #7C3AED;
+      --act4-soft: #F5F3FF;
+      --act4-border: #C4B5FD;
+
+      --act5: #D97706;
+      --act5-soft: #FFFBEB;
+      --act5-border: #FCD34D;
+
+      --act6: #0F766E;
+      --act6-soft: #F0FDFA;
+      --act6-border: #5EEAD4;
+
+      --navy-crest: #172554;
+      --gold-crest: #B45309;
+
+      --shadow-sm: 0 2px 6px rgba(27, 36, 48, 0.05);
+      --shadow-md: 0 10px 26px rgba(27, 36, 48, 0.08);
+      --shadow-lg: 0 18px 40px rgba(27, 36, 48, 0.11);
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-academic);
+      background-color: var(--bg-page);
+      background-image:
+        radial-gradient(circle at 12% 8%, rgba(29, 78, 216, 0.06) 0%, transparent 38%),
+        radial-gradient(circle at 88% 12%, rgba(225, 29, 72, 0.06) 0%, transparent 36%),
+        radial-gradient(circle at 85% 88%, rgba(124, 58, 237, 0.06) 0%, transparent 40%),
+        linear-gradient(to bottom, #FAF7F2, #F6F1E7);
+      color: var(--ink-primary);
+      line-height: 1.55;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea, select, option {
+      font-family: var(--font-academic);
+    }
+
+    /* Language display modes */
+    body.lang-en .th-text {
+      display: none !important;
+    }
+
+    body.lang-th-focus .th-text {
+      color: #1E3A8A;
+      font-weight: 600;
+    }
+
+    .app-shell {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 20px 20px 56px;
+    }
+
+    /* Academic Masthead */
+    .masthead {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-top: 5px solid var(--navy-crest);
+      border-radius: var(--radius-lg);
+      padding: 22px 28px 18px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .masthead::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 0;
+      height: 3px;
+      border-top: 1px solid var(--border-strong);
+      border-bottom: 1px solid var(--border-strong);
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .masthead-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 260px;
+      flex: 1;
+    }
+
+    .crest-badge {
+      width: 62px;
+      height: 62px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1E3A8A 0%, #7C3AED 55%, #E11D48 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 6px 16px rgba(30, 58, 138, 0.25);
+      border: 2px solid #FDE68A;
+    }
+
+    .eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-crest);
+      font-weight: 700;
+      margin: 0 0 2px;
+    }
+
+    h1.app-title {
+      margin: 0;
+      font-size: clamp(1.65rem, 2.7vw, 2.25rem);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: var(--navy-crest);
+      line-height: 1.15;
+    }
+
+    .app-subtitle {
+      margin: 4px 0 0;
+      font-size: 1rem;
+      color: var(--ink-secondary);
+      font-style: italic;
+    }
+
+    .app-subtitle .th-text {
+      font-style: normal;
+      font-size: 0.92rem;
+      color: var(--ink-muted);
+      margin-left: 6px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 15px;
+      border-radius: 9px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-card);
+      color: var(--ink-primary);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+      background: var(--bg-subtle);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid #2563EB;
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1E3A8A, #1D4ED8);
+      color: #FFFFFF;
+      border-color: #1E3A8A;
+      box-shadow: 0 4px 12px rgba(29, 78, 216, 0.22);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #172554, #1E40AF);
+      color: #FFFFFF;
+    }
+
+    .btn-vivid {
+      background: linear-gradient(135deg, #E11D48, #7C3AED);
+      color: #FFFFFF;
+      border-color: #BE123C;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.24);
+    }
+
+    .btn-vivid:hover {
+      background: linear-gradient(135deg, #BE123C, #6D28D9);
+      color: #FFFFFF;
+    }
+
+    .btn-emerald {
+      background: linear-gradient(135deg, #059669, #0F766E);
+      color: #FFFFFF;
+      border-color: #047857;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.22);
+    }
+
+    .btn-emerald:hover {
+      background: linear-gradient(135deg, #047857, #115E59);
+      color: #FFFFFF;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.88rem;
+    }
+
+    .lang-pill-group {
+      display: inline-flex;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .lang-pill {
+      border: none;
+      background: transparent;
+      padding: 6px 11px;
+      border-radius: 7px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--ink-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .lang-pill.active {
+      background: var(--bg-card);
+      color: var(--navy-crest);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Act Navigation Stepper */
+    .stepper-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(115px, 1fr));
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .step-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hairline);
+      background: var(--bg-page);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.18s ease;
+      position: relative;
+      color: var(--ink-secondary);
+    }
+
+    .step-tab:hover {
+      background: #FFFFFF;
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .step-tab.active {
+      background: #FFFFFF;
+      color: var(--ink-primary);
+      border-width: 2px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .step-tab[data-theme="1"].active { border-color: var(--act1); background: var(--act1-soft); }
+    .step-tab[data-theme="2"].active { border-color: var(--act2); background: var(--act2-soft); }
+    .step-tab[data-theme="3"].active { border-color: var(--act3); background: var(--act3-soft); }
+    .step-tab[data-theme="4"].active { border-color: var(--act4); background: var(--act4-soft); }
+    .step-tab[data-theme="5"].active { border-color: var(--act5); background: var(--act5-soft); }
+    .step-tab[data-theme="6"].active { border-color: var(--act6); background: var(--act6-soft); }
+    .step-tab[data-theme="7"].active { border-color: var(--navy-crest); background: #EEF2FF; }
+
+    .step-tab-top {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .step-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 0.72rem;
+      background: #E2E8F0;
+      color: #475569;
+    }
+
+    .step-tab.done .step-check {
+      background: #059669;
+      color: #FFFFFF;
+    }
+
+    .step-tab-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--ink-primary);
+      line-height: 1.2;
+    }
+
+    .step-tab-th {
+      font-size: 0.76rem;
+      color: var(--ink-muted);
+      line-height: 1.2;
+    }
+
+    /* Main 2-column Layout */
+    .workbench {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.95fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .workbench {
+        grid-template-columns: 1fr;
+      }
+      .sidebar-panel {
+        order: -1;
+      }
+    }
+
+    /* Main Stage Card */
+    .stage-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 26px 28px 28px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    .stage-banner {
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      border: 1px solid transparent;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .stage-banner.theme-1 { background: var(--act1-soft); border-color: var(--act1-border); }
+    .stage-banner.theme-2 { background: var(--act2-soft); border-color: var(--act2-border); }
+    .stage-banner.theme-3 { background: var(--act3-soft); border-color: var(--act3-border); }
+    .stage-banner.theme-4 { background: var(--act4-soft); border-color: var(--act4-border); }
+    .stage-banner.theme-5 { background: var(--act5-soft); border-color: var(--act5-border); }
+    .stage-banner.theme-6 { background: var(--act6-soft); border-color: var(--act6-border); }
+    .stage-banner.theme-7 { background: linear-gradient(135deg, #EEF2FF, #FDF2F8); border-color: #C7D2FE; }
+
+    .act-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #FFFFFF;
+      border: 1px solid currentColor;
+      margin-bottom: 6px;
+    }
+
+    .theme-1 .act-badge { color: var(--act1); }
+    .theme-2 .act-badge { color: var(--act2); }
+    .theme-3 .act-badge { color: var(--act3); }
+    .theme-4 .act-badge { color: var(--act4); }
+    .theme-5 .act-badge { color: var(--act5); }
+    .theme-6 .act-badge { color: var(--act6); }
+    .theme-7 .act-badge { color: var(--navy-crest); }
+
+    .stage-title {
+      margin: 0;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--ink-primary);
+      line-height: 1.2;
+    }
+
+    .stage-desc {
+      margin: 5px 0 0;
+      font-size: 0.98rem;
+      color: var(--ink-secondary);
+    }
+
+    .stage-desc .th-text {
+      display: block;
+      margin-top: 2px;
+      font-size: 0.92rem;
+      color: var(--ink-muted);
+    }
+
+    .stage-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Question Blocks */
+    .question-block {
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px dashed var(--border-hairline);
+    }
+
+    .question-block:last-of-type {
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: none;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .question-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .theme-1 .question-num { background: var(--act1); }
+    .theme-2 .question-num { background: var(--act2); }
+    .theme-3 .question-num { background: var(--act3); }
+    .theme-4 .question-num { background: var(--act4); }
+    .theme-5 .question-num { background: var(--act5); }
+    .theme-6 .question-num { background: var(--act6); }
+
+    .question-title-wrap {
+      display: flex;
+      align-items: flex-start;
+      flex: 1;
+    }
+
+    .question-en {
+      margin: 0;
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--ink-primary);
+      line-height: 1.3;
+    }
+
+    .question-th {
+      margin: 4px 0 0;
+      font-size: 0.95rem;
+      color: var(--ink-muted);
+    }
+
+    .rule-pill {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      color: var(--ink-secondary);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .rule-pill.satisfied {
+      background: #DCFCE7;
+      border-color: #86EFAC;
+      color: #166534;
+    }
+
+    .inline-alert {
+      display: none;
+      margin: 0 0 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      color: #92400E;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .inline-alert.show {
+      display: block;
+      animation: gentlePop 0.22s ease;
+    }
+
+    @keyframes gentlePop {
+      from { transform: scale(0.98); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Option Cards Grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+      gap: 12px;
+    }
+
+    .option-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 14px 15px 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-hairline);
+      background: #FCFBF8;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+      user-select: none;
+    }
+
+    .option-card:hover {
+      background: #FFFFFF;
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .option-card:focus-visible {
+      outline: 3px solid #2563EB;
+      outline-offset: 2px;
+    }
+
+    .option-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .option-emoji {
+      font-size: 1.55rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-hairline);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .option-check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-strong);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: transparent;
+      background: #FFFFFF;
+      transition: all 0.15s ease;
+    }
+
+    .option-title {
+      font-size: 1.03rem;
+      font-weight: 700;
+      color: var(--ink-primary);
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    .option-desc {
+      font-size: 0.91rem;
+      color: var(--ink-secondary);
+      line-height: 1.38;
+    }
+
+    .option-th {
+      font-size: 0.86rem;
+      color: var(--ink-muted);
+      border-top: 1px dotted #E2DDD2;
+      padding-top: 5px;
+      margin-top: 2px;
+      line-height: 1.35;
+    }
+
+    /* Selected States per Act Theme */
+    .option-card.selected {
+      background: #FFFFFF;
+      border-width: 2px;
+      box-shadow: 0 8px 18px rgba(27, 36, 48, 0.09);
+    }
+
+    .theme-1 .option-card.selected { border-color: var(--act1); background: linear-gradient(to bottom right, #FFFFFF, #EFF6FF); }
+    .theme-1 .option-card.selected .option-check { background: var(--act1); border-color: var(--act1); color: #FFFFFF; }
+
+    .theme-2 .option-card.selected { border-color: var(--act2); background: linear-gradient(to bottom right, #FFFFFF, #FFF1F2); }
+    .theme-2 .option-card.selected .option-check { background: var(--act2); border-color: var(--act2); color: #FFFFFF; }
+
+    .theme-3 .option-card.selected { border-color: var(--act3); background: linear-gradient(to bottom right, #FFFFFF, #ECFDF5); }
+    .theme-3 .option-card.selected .option-check { background: var(--act3); border-color: var(--act3); color: #FFFFFF; }
+
+    .theme-4 .option-card.selected { border-color: var(--act4); background: linear-gradient(to bottom right, #FFFFFF, #F5F3FF); }
+    .theme-4 .option-card.selected .option-check { background: var(--act4); border-color: var(--act4); color: #FFFFFF; }
+
+    .theme-5 .option-card.selected { border-color: var(--act5); background: linear-gradient(to bottom right, #FFFFFF, #FFFBEB); }
+    .theme-5 .option-card.selected .option-check { background: var(--act5); border-color: var(--act5); color: #FFFFFF; }
+
+    .theme-6 .option-card.selected { border-color: var(--act6); background: linear-gradient(to bottom right, #FFFFFF, #F0FDFA); }
+    .theme-6 .option-card.selected .option-check { background: var(--act6); border-color: var(--act6); color: #FFFFFF; }
+
+    /* Stage Footer Navigation */
+    .stage-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 2px solid var(--bg-subtle);
+      flex-wrap: wrap;
+    }
+
+    /* Sticky Right Workbench Sidebar */
+    .sidebar-panel {
+      position: sticky;
+      top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .panel-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px double var(--border-hairline);
+    }
+
+    .panel-heading h2 {
+      margin: 0;
+      font-size: 1.12rem;
+      color: var(--navy-crest);
+    }
+
+    .progress-badge {
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #EEF2FF;
+      color: var(--navy-crest);
+      border: 1px solid #C7D2FE;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-subtle);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--act1), var(--act2), var(--act3), var(--act4), var(--act5), var(--act6));
+      transition: width 0.3s ease;
+    }
+
+    /* Story Mountain SVG */
+    .mountain-box {
+      background: linear-gradient(to bottom, #F8FAFC, #FEFCE8);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 10px 8px 6px;
+      margin-bottom: 14px;
+    }
+
+    .mountain-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Live Recipe List */
+    .recipe-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .recipe-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: 9px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-hairline);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .recipe-item:hover {
+      background: var(--bg-subtle);
+    }
+
+    .recipe-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+      background: #CBD5E1;
+    }
+
+    .recipe-item.filled .recipe-dot[data-act="1"] { background: var(--act1); }
+    .recipe-item.filled .recipe-dot[data-act="2"] { background: var(--act2); }
+    .recipe-item.filled .recipe-dot[data-act="3"] { background: var(--act3); }
+    .recipe-item.filled .recipe-dot[data-act="4"] { background: var(--act4); }
+    .recipe-item.filled .recipe-dot[data-act="5"] { background: var(--act5); }
+    .recipe-item.filled .recipe-dot[data-act="6"] { background: var(--act6); }
+
+    .recipe-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-muted);
+    }
+
+    .recipe-value {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--ink-primary);
+      line-height: 1.25;
+    }
+
+    .recipe-empty {
+      font-size: 0.88rem;
+      font-style: italic;
+      color: #94A3B8;
+    }
+
+    /* Final Blueprint View (Step 7) */
+    .missing-banner {
+      background: #FFFBEB;
+      border: 1px solid #FCD34D;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+
+    .missing-banner h3 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      color: #92400E;
+    }
+
+    .missing-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .missing-chip {
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid #F59E0B;
+      background: #FFFFFF;
+      color: #92400E;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .missing-chip:hover {
+      background: #FEF3C7;
+    }
+
+    .title-picker-box {
+      background: linear-gradient(to right, #EFF6FF, #F5F3FF);
+      border: 1.5px solid #C7D2FE;
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 22px;
+    }
+
+    .title-picker-box h3 {
+      margin: 0 0 4px;
+      font-size: 1.15rem;
+      color: var(--navy-crest);
+    }
+
+    .title-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .title-card {
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #CBD5E1;
+      background: #FFFFFF;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    .title-card:hover {
+      border-color: var(--act4);
+      transform: translateY(-1px);
+    }
+
+    .title-card.selected {
+      border: 2px solid var(--act4);
+      background: #FAF5FF;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.14);
+    }
+
+    .title-card-main {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--navy-crest);
+    }
+
+    .title-card-sub {
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .certificate-sheet {
+      border: 2px solid var(--navy-crest);
+      border-radius: 14px;
+      padding: 22px 24px;
+      background: linear-gradient(to bottom, #FFFFFF, #FCFBF7);
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .certificate-header {
+      text-align: center;
+      border-bottom: 3px double var(--border-strong);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .certificate-kicker {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-crest);
+      font-weight: 700;
+    }
+
+    .certificate-title {
+      margin: 6px 0 4px;
+      font-size: 1.65rem;
+      color: var(--navy-crest);
+    }
+
+    .synopsis-box {
+      background: var(--bg-page);
+      border-left: 4px solid var(--act4);
+      padding: 14px 16px;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 16px;
+      font-size: 1.04rem;
+      line-height: 1.65;
+    }
+
+    .synopsis-th {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-hairline);
+      font-size: 0.94rem;
+      color: var(--ink-secondary);
+    }
+
+    .arc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+    }
+
+    .arc-cell {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hairline);
+      background: #FFFFFF;
+    }
+
+    .arc-cell strong {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 3px;
+    }
+
+    .prompt-studio {
+      background: #0F172A;
+      color: #F8FAFC;
+      border-radius: 14px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .prompt-studio-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .prompt-studio h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #FDE68A;
+    }
+
+    .prompt-textarea {
+      width: 100%;
+      min-height: 310px;
+      background: #1E293B;
+      color: #F1F5F9;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.96rem;
+      line-height: 1.55;
+      resize: vertical;
+    }
+
+    .howto-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      background: #F0FDFA;
+      border: 1px solid #99F6E4;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .howto-step {
+      font-size: 0.92rem;
+      color: #134E4A;
+    }
+
+    .howto-step strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #0F766E;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: #172554;
+      color: #FFFFFF;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: all 0.22s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Print styling for academic classroom submission */
+    @media print {
+      body {
+        background: #FFFFFF !important;
+      }
+      .toolbar, .stepper-wrap, .sidebar-panel, .stage-footer, .title-picker-box, .missing-banner, .howto-strip, .no-print {
+        display: none !important;
+      }
+      .workbench {
+        display: block;
+      }
+      .stage-card {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+      .prompt-studio {
+        background: #FFFFFF;
+        color: #000000;
+        border: 1px solid #999999;
+      }
+      .prompt-studio h3 {
+        color: #000000;
+      }
+      .prompt-textarea {
+        background: #FFFFFF;
+        color: #000000;
+        border: 1px solid #CCCCCC;
+      }
+    }
+  </style>
+</head>
+<body class="lang-bilingual">
+  <div class="app-shell">
+    <!-- Academic Masthead -->
+    <header class="masthead">
+      <div class="masthead-top">
+        <div class="brand-block">
+          <div class="crest-badge" aria-hidden="true">
+            <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 10.5C6 9.12 7.12 8 8.5 8H18.5C19.33 8 20 8.67 20 9.5V31C18.6 29.9 16.7 29.4 14.5 29.4H8.5C7.12 29.4 6 28.28 6 26.9V10.5Z" fill="#FEF3C7" stroke="#FDE68A" stroke-width="1.5"/>
+              <path d="M34 10.5C34 9.12 32.88 8 31.5 8H21.5C20.67 8 20 8.67 20 9.5V31C21.4 29.9 23.3 29.4 25.5 29.4H31.5C32.88 29.4 34 28.28 34 26.9V10.5Z" fill="#FFFFFF" stroke="#FDE68A" stroke-width="1.5"/>
+              <path d="M12 15H16M11 19H16M24 15H29M24 19H28" stroke="#1E3A8A" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M27 24.5C28.4 24.5 29.5 23.4 29.5 22M27 27C29.8 27 32 24.8 32 22" stroke="#E11D48" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="20" cy="6" r="2.2" fill="#FBBF24"/>
+            </svg>
+          </div>
+          <div>
+            <p class="eyebrow">Grade 5 Bilingual Literary Studio &bull; Gemini Storybook Audio Designer</p>
+            <h1 class="app-title">Story Plot Architect</h1>
+            <p class="app-subtitle">
+              Choose fun plot building blocks to craft your 10-page illustrated audio storybook
+              <span class="th-text">(เลือกไอเดียสนุกๆ เพื่อสร้างโครงเรื่องหนังสือนิทานเสียง 10 หน้าใน Gemini)</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="lang-pill-group" role="group" aria-label="Language display mode">
+            <button type="button" class="lang-pill active" data-lang="bilingual" title="Show English and Thai">EN + ไทย</button>
+            <button type="button" class="lang-pill" data-lang="en" title="English Challenge Mode">English Only</button>
+          </div>
+          <button type="button" class="btn btn-sm" id="btnRandomAll" title="Spin a surprise plot combination">
+            🎲 Surprise Plot
+          </button>
+          <button type="button" class="btn btn-sm" id="btnReset" title="Clear all choices and start fresh">
+            ↺ Reset
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 7-Tab Act Navigation Stepper -->
+    <nav class="stepper-wrap" aria-label="Story plot stages">
+      <div class="stepper" id="stepperNav"></div>
+    </nav>
+
+    <!-- Main Workbench -->
+    <main class="workbench">
+      <!-- Left Interactive Question / Blueprint Stage -->
+      <section class="stage-card" id="mainStage" aria-live="polite"></section>
+
+      <!-- Right Sticky Live Story Mountain & Blueprint Summary -->
+      <aside class="sidebar-panel" aria-label="Live Story Plot Progress">
+        <div class="panel-box">
+          <div class="panel-heading">
+            <h2>Your Story Mountain</h2>
+            <span class="progress-badge" id="progressBadge">0 / 14</span>
+          </div>
+          <div class="progress-bar-track" aria-hidden="true">
+            <div class="progress-bar-fill" id="progressBarFill"></div>
+          </div>
+
+          <div class="mountain-box">
+            <svg class="mountain-svg" viewBox="0 0 340 165" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="5-stage story plot mountain diagram">
+              <defs>
+                <linearGradient id="mountainGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#DBEAFE" stop-opacity="0.7" />
+                  <stop offset="50%" stop-color="#EDE9FE" stop-opacity="0.85" />
+                  <stop offset="100%" stop-color="#FEF3C7" stop-opacity="0.7" />
+                </linearGradient>
+              </defs>
+              <!-- Base Mountain Shape -->
+              <path d="M 16 138 L 78 124 L 140 82 L 188 32 L 246 95 L 320 128 L 320 148 L 16 148 Z" fill="url(#mountainGrad)" />
+              <!-- Plot Curve Line -->
+              <path d="M 28 134 Q 58 132 82 122 Q 112 108 140 80 Q 165 55 188 32 Q 218 62 248 96 Q 280 124 312 128" fill="none" stroke="#94A3B8" stroke-width="3" stroke-dasharray="5 4" stroke-linecap="round"/>
+
+              <!-- Node 1: Beginning -->
+              <g id="mNode1">
+                <circle cx="34" cy="133" r="11" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2.5"/>
+                <text x="34" y="137" text-anchor="middle" font-size="11" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">I</text>
+                <text x="34" y="158" text-anchor="middle" font-size="9.5" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">Begin</text>
+              </g>
+
+              <!-- Node 2: Spark -->
+              <g id="mNode2">
+                <circle cx="92" cy="116" r="11" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2.5"/>
+                <text x="92" y="120" text-anchor="middle" font-size="11" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">II</text>
+                <text x="92" y="158" text-anchor="middle" font-size="9.5" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">Spark</text>
+              </g>
+
+              <!-- Node 3: Rising -->
+              <g id="mNode3">
+                <circle cx="140" cy="80" r="11" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2.5"/>
+                <text x="140" y="84" text-anchor="middle" font-size="11" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">III</text>
+                <text x="140" y="158" text-anchor="middle" font-size="9.5" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">Trials</text>
+              </g>
+
+              <!-- Node 4: Climax -->
+              <g id="mNode4">
+                <circle cx="188" cy="32" r="13" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2.5"/>
+                <text x="188" y="36" text-anchor="middle" font-size="11" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">IV</text>
+                <text x="188" y="14" text-anchor="middle" font-size="10" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">Climax Peak</text>
+              </g>
+
+              <!-- Node 5: Ending -->
+              <g id="mNode5">
+                <circle cx="256" cy="102" r="11" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2.5"/>
+                <text x="256" y="106" text-anchor="middle" font-size="11" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">V</text>
+                <text x="256" y="158" text-anchor="middle" font-size="9.5" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">Ending</text>
+              </g>
+
+              <!-- Node 6: Audio & Art -->
+              <g id="mNode6">
+                <circle cx="308" cy="126" r="11" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2.5"/>
+                <text x="308" y="130" text-anchor="middle" font-size="11" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">VI</text>
+                <text x="308" y="158" text-anchor="middle" font-size="9.5" font-family="Times New Roman, serif" font-weight="bold" fill="#475569">Audio</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="recipe-list" id="recipeList"></div>
+
+          <div style="margin-top: 14px; display: grid; gap: 8px;">
+            <button type="button" class="btn btn-vivid" id="btnJumpBlueprint">
+              ✨ View My Story Blueprint
+            </button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const STORAGE_KEY = 'g5_story_plot_architect_v1';
+
+      const ACTS = [
+        {
+          id: 1,
+          roman: 'I',
+          shortName: 'Hero & World',
+          shortTh: 'ตัวละครและฉาก',
+          badge: 'Act I • Exposition (จุดเริ่มต้น)',
+          title: 'Meet Your Hero & Magical Setting',
+          descEn: 'Every great plot starts by introducing who we care about and where the story begins.',
+          descTh: 'โครงเรื่องที่ดีเริ่มจากการแนะนำว่าตัวละครเอกคือใคร และเรื่องเกิดขึ้นที่ไหน',
+          color: '#1D4ED8',
+          questions: [
+            {
+              id: 'hero',
+              num: 1,
+              shortLabel: 'Main Hero',
+              type: 'single',
+              promptEn: 'Who is the main hero of your story?',
+              promptTh: 'ใครคือตัวละครเอกในเรื่องของคุณ?',
+              options: [
+                {
+                  id: 'clever_animal',
+                  emoji: '🦊',
+                  title: 'A Clever Talking Animal',
+                  desc: 'A witty Siamese cat or curious red fox who notices tiny details',
+                  th: 'สัตว์พูดได้ที่แสนฉลาด เช่น แมววิเชียรมาศ หรือสุนัขจิ้งจอกช่างสังเกต',
+                  storyNoun: 'a clever talking Siamese cat named Mochi',
+                  storyShort: 'Clever Talking Cat'
+                },
+                {
+                  id: 'grade5_student',
+                  emoji: '🎒',
+                  title: 'A Brave Grade 5 Student',
+                  desc: 'An everyday kid who discovers an extraordinary secret talent',
+                  th: 'นักเรียนชั้น ป.5 ผู้กล้าหาญ ที่ค้นพบพรสวรรค์ลับสุดพิเศษ',
+                  storyNoun: 'a brave Grade 5 student named Mali',
+                  storyShort: 'Brave Grade 5 Hero'
+                },
+                {
+                  id: 'curious_robot',
+                  emoji: '🤖',
+                  title: 'A Curious Little Robot',
+                  desc: 'A pocket-sized helper bot learning about friendship and feelings',
+                  th: 'หุ่นยนต์ตัวจิ๋วขี้สงสัย ที่กำลังเรียนรู้เรื่องมิตรภาพและความรู้สึก',
+                  storyNoun: 'a curious pocket-sized robot named Pip-5',
+                  storyShort: 'Curious Little Robot'
+                },
+                {
+                  id: 'young_inventor',
+                  emoji: '✨',
+                  title: 'An Apprentice Inventor / Mage',
+                  desc: 'A creative tinkerer whose inventions always cause funny surprises',
+                  th: 'นักประดิษฐ์หรือจอมเวทฝึกหัด ที่สิ่งประดิษฐ์มักสร้างเรื่องชวนยิ้มเสมอ',
+                  storyNoun: 'an imaginative young inventor named Khao',
+                  storyShort: 'Apprentice Inventor'
+                },
+                {
+                  id: 'nature_spirit',
+                  emoji: '🌿',
+                  title: 'A Guardian Spirit of Nature',
+                  desc: 'A tiny keeper of rivers, rainclouds, and glowing lotus flowers',
+                  th: 'ภูตน้อยผู้พิทักษ์ธรรมชาติ ผู้ดูแลสายน้ำ เมฆฝน และดอกบัวเรืองแสง',
+                  storyNoun: 'a gentle guardian spirit of the river named Bua',
+                  storyShort: 'Nature Guardian Spirit'
+                },
+                {
+                  id: 'junior_detective',
+                  emoji: '🕵️‍♀️',
+                  title: 'A Junior Mystery Detective',
+                  desc: 'Armed with a magnifying glass, colored pens, and sharp questions',
+                  th: 'นักสืบจิ๋ว พกแว่นขยาย ปากกาสี และคำถามสุดเฉียบ',
+                  storyNoun: 'a sharp-eyed junior detective named Namo',
+                  storyShort: 'Junior Detective'
+                }
+              ]
+            },
+            {
+              id: 'trait',
+              num: 2,
+              shortLabel: 'Strength & Flaw',
+              type: 'single',
+              promptEn: 'What special strength AND funny flaw makes your hero memorable?',
+              promptTh: 'ตัวละครเอกมีจุดเด่นอะไร และมีข้อเสียสุดน่ารักแบบไหน?',
+              options: [
+                {
+                  id: 'curious_trouble',
+                  emoji: '💡',
+                  title: 'Super Curious, Wanders Into Trouble',
+                  desc: 'Always asks "Why?" and spots hidden clues, even behind locked doors',
+                  th: 'ขี้สงสัย ชอบถามว่า "ทำไม" จนเจอเบาะแสลับ แต่มักเผลอเดินเข้าเรื่องวุ่น',
+                  storyClause: 'who is endlessly curious and notices hidden clues everywhere, though her curiosity often leads her straight into trouble'
+                },
+                {
+                  id: 'creative_messy',
+                  emoji: '🎨',
+                  title: 'Creative Planner, Super Forgetful',
+                  desc: 'Invents brilliant ideas, yet forgets where she left her backpack',
+                  th: 'คิดแผนเก่งสุดๆ แต่ขี้ลืม ชอบลืมว่าวางกระเป๋าหรืออุปกรณ์ไว้ที่ไหน',
+                  storyClause: 'who bursts with creative ideas, though she constantly misplaces her tools at the worst possible moment'
+                },
+                {
+                  id: 'kind_shy',
+                  emoji: '💛',
+                  title: 'Kind & Loyal, Very Shy at First',
+                  desc: 'Cares deeply about others, but must find the courage to speak up',
+                  th: 'ใจดีและรักเพื่อนมาก แต่ขี้อาย ต้องรวบรวมความกล้าเพื่อพูดในเวลาสำคัญ',
+                  storyClause: 'who has the kindest heart, though speaking up loudly in front of others makes her knees shake'
+                },
+                {
+                  id: 'fast_impulsive',
+                  emoji: '⚡',
+                  title: 'Fearless & Fast, Acts Before Thinking',
+                  desc: 'Jumps into action immediately—sometimes causing hilarious chaos',
+                  th: 'กล้าหาญและว่องไวมาก แต่มักรีบลงมือทำก่อนทันคิดจนเกิดเรื่องป่วน',
+                  storyClause: 'who leaps bravely into action in half a second, though rushing ahead before thinking causes hilarious surprises'
+                },
+                {
+                  id: 'fact_worrier',
+                  emoji: '📚',
+                  title: 'Full of Fun Facts, Worries Too Much',
+                  desc: 'Knows amazing trivia, yet panics whenever plans suddenly change',
+                  th: 'รอบรู้เรื่องน่าทึ่ง แต่ขี้กังวลเวลาแผนการเปลี่ยนแปลงกะทันหัน',
+                  storyClause: 'who knows hundreds of amazing facts, though unexpected surprises make her worry twice as fast'
+                }
+              ]
+            },
+            {
+              id: 'setting',
+              num: 3,
+              shortLabel: 'Starting Setting',
+              type: 'single',
+              promptEn: 'Where does the adventure begin?',
+              promptTh: 'การผจญภัยครั้งนี้เริ่มต้นที่ไหน?',
+              options: [
+                {
+                  id: 'bilingual_school',
+                  emoji: '🏫',
+                  title: 'Secret Room in a Bilingual School',
+                  desc: 'Behind the library bookshelf where whispered stories glow softly',
+                  th: 'ห้องลับในโรงเรียนสองภาษา หลังชั้นหนังสือห้องสมุดที่เรื่องราวส่องแสงได้',
+                  storyPlace: 'a secret hidden room behind the library bookshelves at a lively bilingual school',
+                  storyShort: 'Secret School Room'
+                },
+                {
+                  id: 'night_market',
+                  emoji: '🏮',
+                  title: 'A Magical Riverside Night Market',
+                  desc: 'Glowing paper lanterns, floating boats, and mysterious mango-rice stalls',
+                  th: 'ตลาดกลางคืนริมน้ำสุดมหัศจรรย์ เต็มไปด้วยโคมไฟ เรือพาย และร้านค้าลึกลับ',
+                  storyPlace: 'a magical riverside night market sparkling with floating paper lanterns and mysterious stalls',
+                  storyShort: 'Magic Night Market'
+                },
+                {
+                  id: 'treehouse',
+                  emoji: '🌳',
+                  title: 'Enchanted Mango & Banyan Treehouse',
+                  desc: 'High above a whispering garden full of fireflies and secret pulleys',
+                  th: 'บ้านต้นไม้มะม่วงและต้นไทรวิเศษ สูงเหนือสวนกระซิบที่เต็มไปด้วยหิ่งห้อย',
+                  storyPlace: 'an enchanted treehouse perched high in an ancient mango and banyan garden full of fireflies',
+                  storyShort: 'Enchanted Treehouse'
+                },
+                {
+                  id: 'sky_train',
+                  emoji: '🌌',
+                  title: 'A Floating Sky-Train in the Clouds',
+                  desc: 'A silver train gliding between rainbow clouds and starlight stations',
+                  th: 'รถไฟลอยฟ้าท่ามกลางหมู่เมฆ แล่นผ่านสายรุ้งและสถานีแห่งดวงดาว',
+                  storyPlace: 'a shimmering sky-train gliding across cotton clouds between starlight stations',
+                  storyShort: 'Cloud Sky-Train'
+                },
+                {
+                  id: 'coral_island',
+                  emoji: '🏝️',
+                  title: 'A Hidden Coral Island',
+                  desc: 'Singing seashells, tide-pool mirrors, and crystal underwater caves',
+                  th: 'เกาะปะการังลับแล ที่มีเปลือกหอยร้องเพลงและถ้ำคริสตัลใต้ทะเล',
+                  storyPlace: 'a hidden coral island filled with singing seashells and glowing crystal tide pools',
+                  storyShort: 'Coral Island'
+                },
+                {
+                  id: 'clock_shop',
+                  emoji: '🕰️',
+                  title: 'Grandmother\'s Clock & Book Shop',
+                  desc: 'Where dusty brass clocks chime melodies and tick backward at dusk',
+                  th: 'ร้านหนังสือและนาฬิกาของคุณยาย ที่นาฬิกาโบราณเดินถอยหลังยามพลบค่ำ',
+                  storyPlace: 'Grandmother\'s cozy antique clock and book shop where brass clocks hum and tick backward',
+                  storyShort: 'Magic Clock Shop'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 2,
+          roman: 'II',
+          shortName: 'Spark & Friend',
+          shortTh: 'จุดประกายและคู่หู',
+          badge: 'Act II • Inciting Incident (เหตุการณ์จุดประกาย)',
+          title: 'The Unexpected Spark & Loyal Sidekick',
+          descEn: 'Something sudden changes normal life and pulls your hero and a partner into action!',
+          descTh: 'เหตุการณ์ไม่คาดฝันเกิดขึ้นและดึงตัวละครเอกกับคู่หูเข้าสู่การผจญภัย!',
+          color: '#E11D48',
+          questions: [
+            {
+              id: 'spark',
+              num: 4,
+              shortLabel: 'Inciting Spark',
+              type: 'single',
+              promptEn: 'What sudden event launches the adventure?',
+              promptTh: 'เหตุการณ์ไม่คาดฝันใดที่ทำให้เรื่องราวเริ่มต้นขึ้น?',
+              options: [
+                {
+                  id: 'glowing_map',
+                  emoji: '🗺️',
+                  title: 'A Glowing Map or Secret Letter Arrives',
+                  desc: 'It points to a forgotten treasure that only activates today',
+                  th: 'แผนที่เรืองแสงหรือจดหมายลับปรากฏขึ้น นำไปสู่สมบัติที่ถูกซ่อนไว้',
+                  storyEvent: 'a glowing origami map flutters down and reveals a secret path that opens only once a century',
+                  storyShort: 'Glowing Secret Map',
+                  titlePhrase: 'Glowing Secret Map'
+                },
+                {
+                  id: 'vanished_thing',
+                  emoji: '🎨',
+                  title: 'All Colors or Sound Suddenly Vanishes!',
+                  desc: 'The world turns black-and-white—or silent—until the mystery is fixed',
+                  th: 'สีสันหรือเสียงดนตรีของเมืองหายไปอย่างปริศนา ต้องรีบตามหาคืนมา',
+                  storyEvent: 'every bright color in the neighborhood suddenly fades to pale gray, leaving only one sparkling clue behind',
+                  storyShort: 'Colors Vanish!',
+                  titlePhrase: 'Missing Colors Mystery'
+                },
+                {
+                  id: 'portal_oops',
+                  emoji: '🚪',
+                  title: 'An Accidental Portal Opens',
+                  desc: 'Opening the wrong door leads straight into a whimsical upside-down realm',
+                  th: 'ประตูมิติเปิดออกโดยบังเอิญ พาหลุดเข้าสู่โลกกลับหัวสุดมหัศจรรย์',
+                  storyEvent: 'a glowing chalk doorway accidentally opens into an upside-down world of floating staircases',
+                  storyShort: 'Accidental Portal',
+                  titlePhrase: 'Upside-Down Doorway'
+                },
+                {
+                  id: 'lost_creature',
+                  emoji: '🐾',
+                  title: 'A Lost Magical Creature Needs Help',
+                  desc: 'A tiny cloud-dragon or star-turtle taps on the window asking to get home',
+                  th: 'สัตว์วิเศษตัวจิ๋วหลงทางมาเคาะหน้าต่างเพื่อขอให้ช่วยพากลับบ้าน',
+                  storyEvent: 'a tiny lost cloud-dragon with hiccups taps on the window begging for help to find its way home',
+                  storyShort: 'Lost Cloud-Dragon',
+                  titlePhrase: 'Lost Cloud-Dragon'
+                },
+                {
+                  id: 'time_loop',
+                  emoji: '⏰',
+                  title: 'Time Freezes or Keeps Repeating!',
+                  desc: 'Everyone else pauses like statues—or Monday morning repeats twice',
+                  th: 'เวลาหยุดนิ่งหรือวนซ้ำไปเรื่อยๆ จนกว่าจะแก้ปริศนาลับได้สำเร็จ',
+                  storyEvent: 'the big bell chimes thirteen times and freezes every clock in town, trapping the afternoon in a playful time loop',
+                  storyShort: 'Frozen Time Loop',
+                  titlePhrase: 'Frozen Clock Mystery'
+                }
+              ]
+            },
+            {
+              id: 'sidekick',
+              num: 5,
+              shortLabel: 'Loyal Sidekick',
+              type: 'single',
+              promptEn: 'Who teams up with your hero as a sidekick?',
+              promptTh: 'ใครคือคู่หูที่จะร่วมผจญภัยไปกับตัวละครเอก?',
+              options: [
+                {
+                  id: 'riddle_owl',
+                  emoji: '🦉',
+                  title: 'A Grumpy, Wise Owl Who Speaks in Riddles',
+                  desc: 'Always complains about naps, yet gives clever hints',
+                  th: 'นกฮูกแสนรู้ขี้บ่น ที่ชอบพูดเป็นปริศนาคำทายแต่ช่วยใบ้ทางเก่ง',
+                  storyAlly: 'a grumpy yet wise spectacled owl who speaks in funny rhyming riddles',
+                  storyShort: 'Riddle Owl',
+                  allyTitle: 'The Riddle Owl'
+                },
+                {
+                  id: 'snack_friend',
+                  emoji: '🧁',
+                  title: 'A Cheerful Best Friend With Endless Snacks',
+                  desc: 'Brings mango sticky rice, jokes, and endless positivity',
+                  th: 'เพื่อนสนิทสายฮา พกขนมอร่อยและมุกตลกติดกระเป๋าไว้ให้กำลังใจเสมอ',
+                  storyAlly: 'her cheerful best friend who keeps emergency mango sticky rice and clever gadgets inside a giant backpack',
+                  storyShort: 'Snack-Master Friend',
+                  allyTitle: 'The Snack-Backpack Squad'
+                },
+                {
+                  id: 'firefly_drone',
+                  emoji: '🦋',
+                  title: 'A Tiny Glowing Firefly Helper',
+                  desc: 'Lights up dark tunnels and buzzes bilingual hints',
+                  th: 'หิ่งห้อยเรืองแสงตัวจิ๋ว คอยส่องทางในที่มืดและกระซิบคำใบ้สองภาษา',
+                  storyAlly: 'a tiny clockwork firefly that lights up dark tunnels and translates secret symbols',
+                  storyShort: 'Clockwork Firefly',
+                  allyTitle: 'The Clockwork Firefly'
+                },
+                {
+                  id: 'living_plush',
+                  emoji: '🧸',
+                  title: 'A Stuffed Bear That Came to Life',
+                  desc: 'Small and stitched, yet surprisingly brave in tight spots',
+                  th: 'ตุ๊กตาหมีตัวโปรดที่มีชีวิตขึ้นมา ตัวเล็กแต่ใจใหญ่ไม่ยอมแพ้',
+                  storyAlly: 'her favorite stitched teddy bear that blinked awake with surprising bravery and bouncy footsteps',
+                  storyShort: 'Living Teddy Bear',
+                  allyTitle: 'The Living Teddy Bear'
+                },
+                {
+                  id: 'quiet_classmate',
+                  emoji: '🎵',
+                  title: 'A Quiet New Classmate With Hidden Talent',
+                  desc: 'Rarely speaks in class, but turns out to know the secret melody',
+                  th: 'เพื่อนใหม่เงียบขรึมในห้องเรียน ที่ซ่อนความสามารถพิเศษน่าทึ่งเอาไว้',
+                  storyAlly: 'a quiet new classmate whose pocket notebook holds the exact missing sketches',
+                  storyShort: 'Quiet Talented Friend',
+                  allyTitle: 'The Secret-Sketch Friend'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 3,
+          roman: 'III',
+          shortName: 'Trials & Twist',
+          shortTh: 'อุปสรรคและหักมุม',
+          badge: 'Act III • Rising Action (การไต่ระดับความตื่นเต้น)',
+          title: 'Obstacles Climb & A Surprise Twist!',
+          descEn: 'A strong plot never goes in a straight line—pick 2 tricky obstacles and 1 big twist!',
+          descTh: 'เรื่องราวจะน่าติดตามเมื่อมีอุปสรรคท้าทาย เลือกอุปสรรค 2 อย่าง และจุดหักมุมสุดเซอร์ไพรส์ 1 อย่าง!',
+          color: '#059669',
+          questions: [
+            {
+              id: 'obstacles',
+              num: 6,
+              shortLabel: '2 Obstacles',
+              type: 'multi',
+              maxSelect: 2,
+              promptEn: 'Choose 2 obstacles that test the hero along the way!',
+              promptTh: 'เลือก 2 อุปสรรคที่ขวางทางตัวละครเอกระหว่างผจญภัย!',
+              options: [
+                {
+                  id: 'riddle_gate',
+                  emoji: '🧩',
+                  title: 'A Talking Riddle Gate',
+                  desc: 'Won\'t unlock unless both teammates combine two different clues',
+                  th: 'ประตูปริศนาช่างพูด จะเปิดออกเมื่อเพื่อนทั้งสองช่วยกันรวมเบาะแส',
+                  storyPhrase: 'unlocking a stubborn talking Riddle Gate that requires teamwork',
+                  storyShort: 'Riddle Gate'
+                },
+                {
+                  id: 'storm_detour',
+                  emoji: '🌧️',
+                  title: 'A Sudden Monsoon Detour',
+                  desc: 'Flooded stepping stones force a thrilling crossing over glowing lily pads',
+                  th: 'พายุฝนฉับพลันทำให้ต้องข้ามเส้นทางลับบนใบบัวเรืองแสง',
+                  storyPhrase: 'crossing flooded stepping stones during a sudden shimmering monsoon storm',
+                  storyShort: 'Monsoon Detour'
+                },
+                {
+                  id: 'friend_spat',
+                  emoji: '💔',
+                  title: 'A Friend Misunderstanding',
+                  desc: 'The hero and sidekick disagree and have to apologize to move forward',
+                  th: 'ความเข้าใจผิดระหว่างคู่หู จนต้องเปิดใจคุยกันเพื่อเดินหน้าต่อ',
+                  storyPhrase: 'overcoming a hurt misunderstanding between friends who almost walk separate ways',
+                  storyShort: 'Friend Disagreement'
+                },
+                {
+                  id: 'trickster_rival',
+                  emoji: '🦝',
+                  title: 'A Mischievous Trickster Rival',
+                  desc: 'A sneaky raccoon or rival steals the compass and leaves silly traps',
+                  th: 'คู่แข่งจอมป่วนขโมยเข็มทิศไปและวางกับดักสุดฮาไว้ตามทาง',
+                  storyPhrase: 'outwitting a mischievous trickster rival who swaps signposts and sets silly traps',
+                  storyShort: 'Trickster Rival'
+                },
+                {
+                  id: 'power_out',
+                  emoji: '🔋',
+                  title: 'Magic or Gadgets Run Out!',
+                  desc: 'Special powers fizzle out, forcing pure brainpower and creativity',
+                  th: 'พลังวิเศษหรืออุปกรณ์หมดแบตกลางทาง ต้องใช้ไหวพริบล้วนๆ',
+                  storyPhrase: 'solving a crisis after all magical gadgets sputter out of energy halfway',
+                  storyShort: 'Powers Run Out'
+                },
+                {
+                  id: 'sunset_timer',
+                  emoji: '⏳',
+                  title: 'A Ticking Sunset Countdown',
+                  desc: 'Everything must be solved before the golden temple bell rings at 6:00 PM',
+                  th: 'เวลาเดินถอยหลัง ต้องทำภารกิจให้ทันก่อนเสียงระฆังหกโมงเย็น',
+                  storyPhrase: 'racing a ticking countdown before the golden sunset bell rings',
+                  storyShort: 'Sunset Countdown'
+                }
+              ]
+            },
+            {
+              id: 'twist',
+              num: 7,
+              shortLabel: 'Plot Twist',
+              type: 'single',
+              promptEn: 'What surprising Plot Twist happens right before the Climax?',
+              promptTh: 'จุดหักมุมสุดเซอร์ไพรส์ก่อนถึงช่วงไคลแม็กซ์คืออะไร?',
+              options: [
+                {
+                  id: 'villain_helper',
+                  emoji: '🤝',
+                  title: 'The "Villain" Was Trying to Help!',
+                  desc: 'The scary shadow wasn\'t evil—just shy, clumsy, or protecting a baby',
+                  th: '"ตัวร้าย" แท้จริงแล้วกำลังพยายามช่วยเหลือ แค่ถูกเข้าใจผิดหรือขี้อาย!',
+                  storyTwist: 'the mysterious "villain" blocking their path was never evil at all—they were only trying to protect something fragile',
+                  storyShort: 'Kind "Villain" Twist'
+                },
+                {
+                  id: 'hidden_plain_sight',
+                  emoji: '🔑',
+                  title: 'The Missing Secret Was in Plain Sight!',
+                  desc: 'The answer was tucked inside an ordinary snack box or pocket all along',
+                  th: 'ของสำคัญที่ตามหามาตลอด จริงๆ ซ่อนอยู่ในของธรรมดาใกล้ตัวนี่เอง!',
+                  storyTwist: 'the missing key was hidden right inside an ordinary object they carried from Page 1',
+                  storyShort: 'Hidden in Plain Sight'
+                },
+                {
+                  id: 'sidekick_key',
+                  emoji: '🌟',
+                  title: 'The Quiet Sidekick Holds the Answer!',
+                  desc: 'The partner realizes their small quirk is actually the superpower needed',
+                  th: 'คู่หูที่ดูธรรมดากลับเป็นคนกุมกุญแจสำคัญในการแก้ปัญหาทั้งหมด!',
+                  storyTwist: 'the sidekick\'s overlooked quirk turns out to be the exact missing piece of the puzzle',
+                  storyShort: 'Sidekick Saves Clue'
+                },
+                {
+                  id: 'mirror_courage',
+                  emoji: '🪞',
+                  title: 'The Final Lock Tests True Heart, Not Magic',
+                  desc: 'No spell works—the door opens only when the hero faces her own flaw',
+                  th: 'เวทมนตร์ใช้ไม่ได้ผล ประตูจะเปิดเมื่อตัวละครเอกเอาชนะความกลัวในใจตัวเอง',
+                  storyTwist: 'magic spells bounce right off the final lock because only honesty and facing her own flaw can open it',
+                  storyShort: 'Test of True Heart'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 4,
+          roman: 'IV',
+          shortName: 'Big Climax',
+          shortTh: 'จุดไคลแม็กซ์',
+          badge: 'Act IV • Climax Peak (จุดสูงสุดของเรื่อง)',
+          title: 'The Exciting Turning Point',
+          descEn: 'At the top of the Story Mountain, the hero makes a bold choice that changes everything!',
+          descTh: 'บนยอดเขาของโครงเรื่อง ตัวละครเอกต้องตัดสินใจครั้งสำคัญที่สุด!',
+          color: '#7C3AED',
+          questions: [
+            {
+              id: 'climaxAction',
+              num: 8,
+              shortLabel: 'Climax Choice',
+              type: 'single',
+              promptEn: 'How does your hero solve the biggest problem at the Climax?',
+              promptTh: 'ในช่วงไคลแม็กซ์ ตัวละครเอกตัดสินใจแก้ปัญหาใหญ่อย่างไร?',
+              options: [
+                {
+                  id: 'empathy_words',
+                  emoji: '💬',
+                  title: 'Brave Honest Words & Listening',
+                  desc: 'Speaking kindly and understanding why the other side was upset',
+                  th: 'ใช้คำพูดที่กล้าหาญ จริงใจ และรับฟังความรู้สึกของอีกฝ่ายอย่างเข้าใจ',
+                  storyClimax: 'she takes a deep breath, listens closely, and heals the chaos with brave, honest, empathetic words',
+                  storyShort: 'Brave Empathy'
+                },
+                {
+                  id: 'team_puzzle',
+                  emoji: '🧠',
+                  title: 'Last-Second Teamwork Genius',
+                  desc: 'Both friends combine their opposite talents in one dazzling move',
+                  th: 'เพื่อนทั้งสองรวมความสามารถที่ต่างกันเข้าด้วยกันในวินาทีสุดท้าย',
+                  storyClimax: 'she and her companion combine their opposite talents at the very last second to snap the puzzle together',
+                  storyShort: 'Teamwork Genius'
+                },
+                {
+                  id: 'kind_sacrifice',
+                  emoji: '🎁',
+                  title: 'Sharing Something Precious',
+                  desc: 'Giving up her own prized wish or treasure to rescue everyone else',
+                  th: 'ยอมแบ่งปันหรือเสียสละสิ่งสำคัญของตัวเองเพื่อช่วยเหลือส่วนรวม',
+                  storyClimax: 'she willingly gives up her own prized wish so everyone else can be rescued safely',
+                  storyShort: 'Generous Choice'
+                },
+                {
+                  id: 'chain_reaction',
+                  emoji: '🛠️',
+                  title: 'A Hilarious Chain-Reaction Invention',
+                  desc: 'Using rubber bands, umbrellas, and mango peels in a clever machine',
+                  th: 'ประดิษฐ์กลไกสุดฮาจากของรอบตัวจนแก้สถานการณ์ได้อย่างน่าทึ่ง',
+                  storyClimax: 'she builds an inventive, giggle-worthy chain-reaction contraption out of everyday items that saves the day',
+                  storyShort: 'Clever Contraption'
+                },
+                {
+                  id: 'stand_tall',
+                  emoji: '🦁',
+                  title: 'Facing Her Biggest Fear With Courage',
+                  desc: 'Hands shaking, she steps forward anyway—and discovers her inner spark',
+                  th: 'แม้ใจยังสั่นกลัว แต่ก็ก้าวออกไปเผชิญหน้าอย่างมุ่งมั่น',
+                  storyClimax: 'even with shaking knees, she steps forward into the spotlight and turns her greatest weakness into strength',
+                  storyShort: 'Courage Under Pressure'
+                }
+              ]
+            },
+            {
+              id: 'climaxMood',
+              num: 9,
+              shortLabel: 'Climax Mood',
+              type: 'single',
+              promptEn: 'What emotional energy fills the Climax scene?',
+              promptTh: 'บรรยากาศและอารมณ์ของฉากไคลแม็กซ์เป็นแบบไหน?',
+              options: [
+                {
+                  id: 'epic_magic',
+                  emoji: '🌟',
+                  title: 'Sparkling, Epic & Breath-Holding',
+                  desc: 'Swirling stars, echoing chimes, and big dramatic excitement',
+                  th: 'มหัศจรรย์อลังการ ลุ้นระทึกจนแทบกลั้นหายใจ',
+                  storyMood: 'sparkling, cinematic, and breath-holding'
+                },
+                {
+                  id: 'wild_comedy',
+                  emoji: '😂',
+                  title: 'Wild, Bouncy & Laugh-Out-Loud',
+                  desc: 'Flying bubbles, silly sound effects, and joyful giggles',
+                  th: 'ชุลมุนสุดฮา เต็มไปด้วยเสียงหัวเราะและความสนุกสนาน',
+                  storyMood: 'bouncy, chaotic, and laugh-out-loud funny'
+                },
+                {
+                  id: 'warm_heartfelt',
+                  emoji: '💞',
+                  title: 'Warm, Tender & Heart-Melting',
+                  desc: 'A quiet, glowing moment that makes readers smile softly',
+                  th: 'อบอุ่น ซาบซึ้ง กินใจ จนต้องยิ้มตามด้วยความประทับใจ',
+                  storyMood: 'warm, tender, and deeply heartfelt'
+                },
+                {
+                  id: 'aha_mystery',
+                  emoji: '🔎',
+                  title: 'Sharp "Aha!" Detective Reveal',
+                  desc: 'Every tiny clue from earlier snaps neatly into place!',
+                  th: 'เฉียบคมแบบฉากเฉลยปริศนา "อ๋อ!" ทุกเบาะแสเชื่อมโยงกันลงตัว',
+                  storyMood: 'crisp, clever, and puzzle-solving'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 5,
+          roman: 'V',
+          shortName: 'Ending & Lesson',
+          shortTh: 'บทสรุปและข้อคิด',
+          badge: 'Act V • Resolution & Theme (บทสรุปและแก่นเรื่อง)',
+          title: 'The Ending & Heart of the Story',
+          descEn: 'How does the world look after the adventure—and what big idea stays in the listener\'s heart?',
+          descTh: 'เรื่องราวจบลงอย่างน่าประทับใจอย่างไร และผู้อ่านได้ข้อคิดอะไรกลับไป?',
+          color: '#D97706',
+          questions: [
+            {
+              id: 'ending',
+              num: 10,
+              shortLabel: 'Page 10 Ending',
+              type: 'single',
+              promptEn: 'How should the story conclude on Page 10?',
+              promptTh: 'หน้าสุดท้าย (หน้า 10) ของหนังสือควรจบลงแบบไหน?',
+              options: [
+                {
+                  id: 'festival_party',
+                  emoji: '🎉',
+                  title: 'A Joyful Celebration Together',
+                  desc: 'Lanterns rise into the night sky with music, snacks, and cheering',
+                  th: 'งานฉลองแสนสุข ลอยโคมไฟ เสียงดนตรี ขนมอร่อย และรอยยิ้มร่วมกัน',
+                  storyEnd: 'everyone gathers under glowing lanterns for a joyful celebration filled with music, laughter, and sweet treats',
+                  storyShort: 'Joyful Celebration'
+                },
+                {
+                  id: 'cozy_home',
+                  emoji: '🏡',
+                  title: 'A Cozy Return Home, Wiser Than Before',
+                  desc: 'Back in a warm room—ordinary life now sparkles with quiet confidence',
+                  th: 'กลับบ้านอย่างอบอุ่นเรียบง่าย ชีวิตธรรมดาดูมีคุณค่าและมั่นใจยิ่งขึ้น',
+                  storyEnd: 'she returns safely home as golden twilight settles, smiling because she knows how much wiser and braver she has grown',
+                  storyShort: 'Cozy Return Home'
+                },
+                {
+                  id: 'new_alliance',
+                  emoji: '🤝',
+                  title: 'Former Rivals Become Best Partners',
+                  desc: 'Everyone shakes hands and starts a new weekend club together',
+                  th: 'จากคู่แข่งกลายเป็นเพื่อนซี้ จับมือกันตั้งชมรมผจญภัยใหม่',
+                  storyEnd: 'former rivals shake hands and launch a brand-new weekend adventure club together',
+                  storyShort: 'New Friendship Club'
+                },
+                {
+                  id: 'sequel_wink',
+                  emoji: '🔭',
+                  title: 'Happy Ending + One Tiny Clue for Book 2!',
+                  desc: 'Peace is restored—until a mysterious note winks from the window!',
+                  th: 'เรื่องราวคลี่คลายอย่างมีความสุข พร้อมทิ้งเบาะแสชวนลุ้นสำหรับภาค 2!',
+                  storyEnd: 'peace returns warmly to the town—yet just before bedtime, a tiny glowing feather hints that Book 2 might begin soon!',
+                  storyShort: 'Playful Sequel Wink'
+                }
+              ]
+            },
+            {
+              id: 'theme',
+              num: 11,
+              shortLabel: 'Story Theme',
+              type: 'single',
+              promptEn: 'What Big Lesson (Theme) does your story share?',
+              promptTh: 'ข้อคิดหรือแก่นเรื่อง (Theme) ที่อยากส่งต่อให้ผู้ฟังคืออะไร?',
+              options: [
+                {
+                  id: 'teamwork',
+                  emoji: '🤝',
+                  title: 'Different strengths make an unstoppable team',
+                  desc: 'We shine brighter when we listen and help each other',
+                  th: 'ความแตกต่างเมื่อนำมารวมกัน จะกลายเป็นทีมที่แข็งแกร่งที่สุด',
+                  storyTheme: 'True teamwork means celebrating each friend\'s different strengths rather than doing everything alone'
+                },
+                {
+                  id: 'mistakes_grow',
+                  emoji: '🌱',
+                  title: 'Mistakes are stepping stones to discovery',
+                  desc: 'Every funny mess teaches us something clever for the next try',
+                  th: 'ความผิดพลาดไม่ใช่เรื่องน่าอาย แต่เป็นก้าวแรกของการเรียนรู้สิ่งใหม่',
+                  storyTheme: 'Mistakes are not failures—they are stepping stones to creative discoveries'
+                },
+                {
+                  id: 'kindness_bridge',
+                  emoji: '💛',
+                  title: 'Kindness turns strangers into allies',
+                  desc: 'Asking "Are you okay?" can unlock harder doors than magic',
+                  th: 'ความมีน้ำใจและการรับฟัง เปิดประตูใจได้ดีกว่าพลังวิเศษใดๆ',
+                  storyTheme: 'Empathy and kindness can turn even a misunderstanding into lasting friendship'
+                },
+                {
+                  id: 'brave_heart',
+                  emoji: '🦋',
+                  title: 'Bravery means trying even when you feel scared',
+                  desc: 'Courage isn\'t having zero fear—it\'s taking one small step anyway',
+                  th: 'ความกล้าหาญไม่ใช่การไม่กลัว แต่คือการกล้าก้าวไปข้างหน้าแม้ใจยังสั่น',
+                  storyTheme: 'Real bravery means taking the next kind step even when your knees feel shaky'
+                },
+                {
+                  id: 'curiosity_world',
+                  emoji: '🌏',
+                  title: 'Curiosity keeps wonder & culture alive',
+                  desc: 'Noticing small details turns everyday places into magical stories',
+                  th: 'ความช่างสังเกตและความอยากรู้อยากเห็น ทำให้โลกธรรมดากลายเป็นนิทานมหัศจรรย์',
+                  storyTheme: 'Staying curious and cherishing the stories around us fills everyday life with magic'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 6,
+          roman: 'VI',
+          shortName: 'Gemini Audio & Art',
+          shortTh: 'ภาพและเสียง Gemini',
+          badge: 'Act VI • Gemini Storybook Studio (สตูดิโอสร้างหนังสือเสียง)',
+          title: 'Design Art Style, Language & Audio Read-Aloud',
+          descEn: 'Customize how Google Gemini draws your 10-page book and reads it aloud with audio!',
+          descTh: 'เลือกสไตล์ภาพ 10 หน้า ระดับภาษา และน้ำเสียงการอ่านออกเสียงสำหรับ Gemini Storybook!',
+          color: '#0F766E',
+          questions: [
+            {
+              id: 'artStyle',
+              num: 12,
+              shortLabel: 'Art Style',
+              type: 'single',
+              promptEn: 'Which art style should Gemini illustrate across all 10 pages?',
+              promptTh: 'อยากให้ Gemini วาดภาพประกอบทั้ง 10 หน้าในสไตล์ไหน?',
+              options: [
+                {
+                  id: 'watercolor',
+                  emoji: '🎨',
+                  title: 'Cozy Classic Watercolor',
+                  desc: 'Soft hand-painted brushstrokes, warm sunlight, classic picture-book charm',
+                  th: 'ภาพสีน้ำคลาสสิก อบอุ่น อ่อนโยน เหมือนหนังสือนิทานภาพวาดมือ',
+                  promptArt: 'warm, luminous classic hand-painted watercolor picture book illustrations with soft ink outlines and golden lighting'
+                },
+                {
+                  id: 'animated_fantasy',
+                  emoji: '✨',
+                  title: 'Whimsical Storybook Animation',
+                  desc: 'Expressive faces, vivid jewel colors, glowing magic sparkles',
+                  th: 'แอนิเมชันแฟนตาซีสีสันสดใส สีหน้าตัวละครน่ารักชัดเจน มีประกายแสงวิเศษ',
+                  promptArt: 'whimsical 3D-inspired storybook fantasy illustrations with rich jewel colors, expressive character faces, and gentle glowing light'
+                },
+                {
+                  id: 'paper_cut',
+                  emoji: '✂️',
+                  title: 'Layered Paper-Cut Collage',
+                  desc: 'Textured craft layers with crisp shadows like an illustrated pop-up book',
+                  th: 'ภาพตัดกระดาษซ้อนหลายชั้น มีแสงเงาสวยงามเหมือนหนังสือป๊อปอัพทำมือ',
+                  promptArt: 'intricate layered paper-cut collage art with tactile craft-paper textures, gentle drop shadows, and vibrant color blocking'
+                },
+                {
+                  id: 'claymation',
+                  emoji: '🧶',
+                  title: 'Cute Claymation & Felt Craft',
+                  desc: 'Adorable sculpted miniature sets that look cozy enough to touch',
+                  th: 'สไตล์ดินปั้นและผ้าสักหลาดจำลอง ฉากจิ๋วน่ารักน่าเอ็นดู',
+                  promptArt: 'charming miniature claymation and needle-felted craft illustrations with cozy studio lighting and handcrafted textures'
+                },
+                {
+                  id: 'comic_bright',
+                  emoji: '💥',
+                  title: 'Vibrant Graphic Novel / Manga-Lite',
+                  desc: 'Clean expressive lines, lively action angles, and colorful scenes',
+                  th: 'สไตล์การ์ตูนคอมิกสีสันสดใส ลายเส้นคมชัด มุมภาพสนุกมีชีวิตชีวา',
+                  promptArt: 'vibrant child-friendly graphic novel illustrations with clean crisp ink lines, dynamic storytelling angles, and expressive colors'
+                }
+              ]
+            },
+            {
+              id: 'languageMode',
+              num: 13,
+              shortLabel: 'Bilingual Format',
+              type: 'single',
+              promptEn: 'Which Grade 5 bilingual reading format should Gemini write?',
+              promptTh: 'อยากให้ Gemini เขียนเนื้อเรื่องในรูปแบบภาษาใดสำหรับนักเรียน ป.5?',
+              options: [
+                {
+                  id: 'g5_english',
+                  emoji: '🇬🇧',
+                  title: 'Clear Grade 5 English + 5 Spotlight Words',
+                  desc: 'Natural, expressive English with 5 fun bold vocabulary words to learn',
+                  th: 'ภาษาอังกฤษระดับ ป.5 อ่านสนุกเข้าใจง่าย พร้อมคำศัพท์เด่นน่าเรียนรู้ 5 คำ',
+                  promptLang: 'Write in clear, vivid English tailored for a Grade 5 bilingual learner (ages 10-11, CEFR A2+/B1). Highlight 5 fun vocabulary words naturally across the story and include a short mini-glossary at the end of Page 10.'
+                },
+                {
+                  id: 'thai_flavor_en',
+                  emoji: '🌺',
+                  title: 'English Prose + Warm Thai Cultural Touches',
+                  desc: 'English storybook sprinkling familiar Thai snacks, greetings, and nature',
+                  th: 'นิทานภาษาอังกฤษที่มีกลิ่นอายวัฒนธรรมไทย ขนมไทย และบรรยากาศอันคุ้นเคย',
+                  promptLang: 'Write in lively, natural Grade 5 English enriched with warm Thai bilingual touches (e.g., Thai snacks, friendly greetings, or local blossoms) smoothly explained in context for audio storytelling.'
+                },
+                {
+                  id: 'bilingual_parallel',
+                  emoji: '🌏',
+                  title: 'Bilingual English + Thai Side-by-Side',
+                  desc: 'Each page starts with English narration followed by a natural Thai echo',
+                  th: 'สองภาษาคู่กันทุกหน้า มีทั้งประโยคภาษาอังกฤษและคำแปลภาษาไทยที่สละสลวย',
+                  promptLang: 'Format each of the 10 pages cleanly for a Thai-English bilingual Grade 5 student: write 2–3 expressive read-aloud sentences in clear English first, followed by a concise, natural Thai translation underneath so both languages shine.'
+                }
+              ]
+            },
+            {
+              id: 'audioVibe',
+              num: 14,
+              shortLabel: 'Audio Voice',
+              type: 'single',
+              promptEn: 'What Audio Read-Aloud voice & rhythm should Gemini optimize for?',
+              promptTh: 'อยากให้ฟีเจอร์อ่านออกเสียง (Audio Read-Aloud) มีสไตล์การเล่าแบบไหน?',
+              options: [
+                {
+                  id: 'theater_narrator',
+                  emoji: '🎭',
+                  title: 'Playful Theater Narrator (With Sound Words!)',
+                  desc: 'Lively dialogue, fun onomatopoeia (whoosh! ting!), and dramatic pauses',
+                  th: 'นักเล่านิทานสายละครเวที บทสนทนาสนุก มีคำเลียนเสียงธรรมชาติ และจังหวะชวนลุ้น',
+                  promptAudio: 'Optimize sentences specifically for Gemini\'s audio read-aloud narration with playful theater pacing: crisp expressive dialogue, vivid sound words (like "whoosh!", "clink!", "gasp!"), rhythmic variety, and clean page-turn suspense.'
+                },
+                {
+                  id: 'warm_bedtime',
+                  emoji: '🌙',
+                  title: 'Warm, Lyrical Storytime Voice',
+                  desc: 'Smooth, comforting cadence with gentle poetic rhythm',
+                  th: 'เสียงเล่านิทานแสนอบอุ่น จังหวะนุ่มนวล ไพเราะ ฟังเพลินสบายใจ',
+                  promptAudio: 'Optimize sentences specifically for Gemini\'s audio read-aloud narration with a warm, lyrical, comforting storytime cadence—smooth phrasing, musical flow, and gentle emotional warmth.'
+                },
+                {
+                  id: 'adventure_host',
+                  emoji: '🚀',
+                  title: 'Energetic Adventure Storyteller',
+                  desc: 'Punchy action beats and exciting page-turn hooks on every page',
+                  th: 'นักเล่าเรื่องสายผจญภัย จังหวะกระชับ ฉับไว ชวนลุ้นก่อนเปิดหน้าถัดไป',
+                  promptAudio: 'Optimize sentences specifically for Gemini\'s audio read-aloud narration with upbeat, energetic adventure pacing—short punchy sentences during action, expressive exclamations, and exciting page-turn hooks.'
+                },
+                {
+                  id: 'mystery_whisper',
+                  emoji: '🔍',
+                  title: 'Clever Mystery Narrator',
+                  desc: 'Intriguing questions, clue-spotting rhythm, and crisp pronunciation',
+                  th: 'นักเล่าเรื่องลึกลับชวนคิด น้ำเสียงน่าค้นหา ชวนสังเกตเบาะแสทุกหน้า',
+                  promptAudio: 'Optimize sentences specifically for Gemini\'s audio read-aloud narration with intriguing mystery cadence—clear articulation, curious rhetorical questions for the listener, and playful clue-building suspense.'
+                }
+              ]
+            }
+          ]
+        }
+      ];
+
+      // Flat lookup for all 14 questions
+      const ALL_QUESTIONS = ACTS.flatMap((act) =>
+        act.questions.map((q) => ({ ...q, actId: act.id, actColor: act.color }))
+      );
+
+      // Default clean state
+      const createEmptyState = () => ({
+        step: 1, // 1..6 for Acts, 7 for Final Blueprint
+        langMode: 'bilingual', // 'bilingual' | 'en'
+        selectedTitleIdx: 0,
+        answers: {
+          hero: null,
+          trait: null,
+          setting: null,
+          spark: null,
+          sidekick: null,
+          obstacles: [],
+          twist: null,
+          climaxAction: null,
+          climaxMood: null,
+          ending: null,
+          theme: null,
+          artStyle: null,
+          languageMode: null,
+          audioVibe: null
+        }
+      });
+
+      let state = loadState();
+      let activeAlertQuestionId = null;
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return createEmptyState();
+          const parsed = JSON.parse(raw);
+          const base = createEmptyState();
+          return {
+            ...base,
+            ...parsed,
+            answers: {
+              ...base.answers,
+              ...(parsed.answers || {}),
+              obstacles: Array.isArray(parsed?.answers?.obstacles) ? parsed.answers.obstacles : []
+            }
+          };
+        } catch (e) {
+          return createEmptyState();
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          // Ignore storage restrictions gracefully
+        }
+      }
+
+      function showToast(msg) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(showToast._timer);
+        showToast._timer = setTimeout(() => {
+          el.classList.remove('show');
+        }, 2600);
+      }
+
+      function stopSpeech() {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+      }
+
+      function speakText(text) {
+        if (!('speechSynthesis' in window)) {
+          showToast('Browser speech preview is unavailable here — copy prompt into Gemini for audio!');
+          return;
+        }
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'en-US';
+        utter.rate = 0.94;
+        utter.pitch = 1.05;
+        const voices = window.speechSynthesis.getVoices();
+        const preferred = voices.find((v) => v.lang.startsWith('en') && /natural|google|zira|samantha|aria|jenny/i.test(v.name))
+          || voices.find((v) => v.lang.startsWith('en'));
+        if (preferred) utter.voice = preferred;
+        window.speechSynthesis.speak(utter);
+      }
+
+      function getOption(qId, optId) {
+        const q = ALL_QUESTIONS.find((item) => item.id === qId);
+        if (!q) return null;
+        return q.options.find((o) => o.id === optId) || null;
+      }
+
+      function isQuestionAnswered(q) {
+        const val = state.answers[q.id];
+        if (q.type === 'multi') {
+          return Array.isArray(val) && val.length === q.maxSelect;
+        }
+        return Boolean(val);
+      }
+
+      function isActComplete(actId) {
+        const act = ACTS.find((a) => a.id === actId);
+        if (!act) return false;
+        return act.questions.every(isQuestionAnswered);
+      }
+
+      function countAnsweredQuestions() {
+        return ALL_QUESTIONS.filter(isQuestionAnswered).length;
+      }
+
+      function getMissingQuestions() {
+        return ALL_QUESTIONS.filter((q) => !isQuestionAnswered(q));
+      }
+
+      function selectOption(qId, optId) {
+        const q = ALL_QUESTIONS.find((item) => item.id === qId);
+        if (!q) return;
+
+        activeAlertQuestionId = null;
+
+        if (q.type === 'single') {
+          state.answers[qId] = optId;
+        } else {
+          const current = Array.isArray(state.answers[qId]) ? [...state.answers[qId]] : [];
+          const idx = current.indexOf(optId);
+          if (idx >= 0) {
+            current.splice(idx, 1);
+          } else if (current.length < q.maxSelect) {
+            current.push(optId);
+          } else {
+            activeAlertQuestionId = qId;
+            saveState();
+            renderAll();
+            return;
+          }
+          state.answers[qId] = current;
+        }
+
+        saveState();
+        renderAll();
+      }
+
+      function randomizeAct(actId) {
+        const act = ACTS.find((a) => a.id === actId);
+        if (!act) return;
+        act.questions.forEach((q) => {
+          const pool = [...q.options];
+          if (q.type === 'single') {
+            const pick = pool[Math.floor(Math.random() * pool.length)];
+            state.answers[q.id] = pick.id;
+          } else {
+            // Shuffle and take maxSelect
+            for (let i = pool.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+            state.answers[q.id] = pool.slice(0, q.maxSelect).map((o) => o.id);
+          }
+        });
+        activeAlertQuestionId = null;
+        saveState();
+        renderAll();
+        showToast(`Spun fresh ideas for Act ${act.roman}!`);
+      }
+
+      function randomizeAll() {
+        ACTS.forEach((act) => {
+          act.questions.forEach((q) => {
+            const pool = [...q.options];
+            if (q.type === 'single') {
+              state.answers[q.id] = pool[Math.floor(Math.random() * pool.length)].id;
+            } else {
+              for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+              }
+              state.answers[q.id] = pool.slice(0, q.maxSelect).map((o) => o.id);
+            }
+          });
+        });
+        state.selectedTitleIdx = 0;
+        activeAlertQuestionId = null;
+        saveState();
+        renderAll();
+        showToast('Surprise plot generated! Tweak any card or view your Blueprint.');
+      }
+
+      function generateTitleChoices() {
+        const hero = getOption('hero', state.answers.hero);
+        const setting = getOption('setting', state.answers.setting);
+        const spark = getOption('spark', state.answers.spark);
+        const ally = getOption('sidekick', state.answers.sidekick);
+
+        const heroWord = hero ? hero.storyShort : 'Brave Hero';
+        const placeWord = setting ? setting.storyShort : 'Secret World';
+        const sparkWord = spark ? spark.titlePhrase : 'Hidden Mystery';
+        const allyWord = ally ? ally.allyTitle : 'The Loyal Friend';
+
+        return [
+          {
+            en: `The Secret of the ${placeWord}`,
+            th: `ความลับแห่ง${setting ? setting.title : 'ดินแดนมหัศจรรย์'}`
+          },
+          {
+            en: `The ${heroWord} and the ${sparkWord}`,
+            th: `การผจญภัยของ${hero ? hero.title : 'ผู้กล้า'}กับเหตุการณ์ปริศนา`
+          },
+          {
+            en: `${allyWord} & the Midnight Clue`,
+            th: `${ally ? ally.title : 'คู่หู'}กับเบาะแสยามค่ำคืน`
+          },
+          {
+            en: `Ten Pages Beyond the ${placeWord}`,
+            th: `สิบหน้าอัศจรรย์เหนือ${setting ? setting.title : 'โลกแห่งจินตนาการ'}`
+          }
+        ];
+      }
+
+      function buildStoryData() {
+        const hero = getOption('hero', state.answers.hero);
+        const trait = getOption('trait', state.answers.trait);
+        const setting = getOption('setting', state.answers.setting);
+        const spark = getOption('spark', state.answers.spark);
+        const sidekick = getOption('sidekick', state.answers.sidekick);
+        const obsIds = Array.isArray(state.answers.obstacles) ? state.answers.obstacles : [];
+        const obs1 = obsIds[0] ? getOption('obstacles', obsIds[0]) : null;
+        const obs2 = obsIds[1] ? getOption('obstacles', obsIds[1]) : null;
+        const twist = getOption('twist', state.answers.twist);
+        const climaxAction = getOption('climaxAction', state.answers.climaxAction);
+        const climaxMood = getOption('climaxMood', state.answers.climaxMood);
+        const ending = getOption('ending', state.answers.ending);
+        const theme = getOption('theme', state.answers.theme);
+        const artStyle = getOption('artStyle', state.answers.artStyle);
+        const languageMode = getOption('languageMode', state.answers.languageMode);
+        const audioVibe = getOption('audioVibe', state.answers.audioVibe);
+
+        const titles = generateTitleChoices();
+        const chosenTitle = titles[state.selectedTitleIdx] || titles[0];
+
+        const obsText = obs1 && obs2
+          ? `${obs1.storyPhrase} and ${obs2.storyPhrase}`
+          : obs1
+            ? obs1.storyPhrase
+            : '[2 rising obstacles yet to be selected]';
+
+        const synopsisEn =
+          `Once upon a time, inside ${setting ? setting.storyPlace : '[your chosen setting]'}, ` +
+          `lived ${hero ? hero.storyNoun : '[your main hero]'}, ${trait ? trait.storyClause : '[with a memorable personality]'}. ` +
+          `Everything changes when ${spark ? spark.storyEvent : '[an unexpected spark happens]'}! ` +
+          `Teaming up with ${sidekick ? sidekick.storyAlly : '[a loyal companion]'}, she faces tough challenges—` +
+          `including ${obsText}. Right before all hope seems lost, a twist strikes: ` +
+          `${twist ? twist.storyTwist : '[a surprising plot twist unfolds]'}! ` +
+          `In a ${climaxMood ? climaxMood.storyMood : 'thrilling'} climax, ${climaxAction ? climaxAction.storyClimax : '[your hero solves the problem]'}. ` +
+          `Finally, ${ending ? ending.storyEnd : '[the story reaches its happy conclusion]'}, reminding everyone that ` +
+          `"${theme ? theme.storyTheme : '[the heart of your story]'}."`;
+
+        const synopsisTh =
+          `เรื่องย่อของคุณ: ณ ${setting ? setting.title : '[ฉากเริ่มต้น]'} ` +
+          `${hero ? hero.title : '[ตัวละครเอก]'} (${trait ? trait.title : '[บุคลิกเด่น]'}) ` +
+          `ได้พบเหตุการณ์จุดประกายเมื่อ "${spark ? spark.title : '[จุดเริ่มต้นเหตุการณ์]'}" ` +
+          `จึงออกผจญภัยร่วมกับ ${sidekick ? sidekick.title : '[คู่หู]'} ฝ่าฟันอุปสรรค ` +
+          `(${obs1 ? obs1.title : '...'} และ ${obs2 ? obs2.title : '...'}) ` +
+          `จนพบจุดหักมุมว่า "${twist ? twist.title : '[จุดหักมุม]'}" ` +
+          `และคลี่คลายจุดไคลแม็กซ์ด้วย "${climaxAction ? climaxAction.title : '[วิธีแก้ปัญหา]'}" ` +
+          `ก่อนจบลงด้วย "${ending ? ending.title : '[ตอนจบ]'}" เพื่อฝากข้อคิดสำคัญเรื่อง "${theme ? theme.title : '[แก่นเรื่อง]'}"`;
+
+        const geminiPrompt =
+`Create a personalized 10-page illustrated children's storybook ready for Gemini's audio read-aloud narration feature.
+
+BOOK TITLE: "${chosenTitle.en}"
+TARGET READER: Grade 5 Thai-English bilingual student (ages 10–11).
+
+STORY ELEMENTS & 5-ACT PLOT ARCHITECTURE:
+- Hero & Personality: ${hero ? hero.storyNoun : '[Choose Hero]'}, ${trait ? trait.storyClause : '[Choose Personality]'}.
+- Opening Setting: ${setting ? setting.storyPlace : '[Choose Setting]'}.
+- Inciting Incident: ${spark ? spark.storyEvent : '[Choose Spark]'}.
+- Loyal Companion: ${sidekick ? sidekick.storyAlly : '[Choose Companion]'}.
+- Rising Obstacles:
+  1) ${obs1 ? obs1.storyPhrase : '[Choose Obstacle 1]'}
+  2) ${obs2 ? obs2.storyPhrase : '[Choose Obstacle 2]'}
+- Pre-Climax Plot Twist: ${twist ? twist.storyTwist : '[Choose Plot Twist]'}.
+- Climax Turning Point (${climaxMood ? climaxMood.storyMood : 'exciting'}): ${climaxAction ? climaxAction.storyClimax : '[Choose Climax]'}.
+- Resolution: ${ending ? ending.storyEnd : '[Choose Ending]'}.
+- Core Theme / Moral: ${theme ? theme.storyTheme : '[Choose Theme]'}.
+
+10-PAGE STORYBOARD PACING:
+- Pages 1–2 (Exposition): Introduce the hero, her strength/flaw, and the opening world vividly.
+- Pages 3–4 (Inciting Incident & Sidekick): Show the sudden spark and how the companion joins the quest.
+- Pages 5–6 (Rising Action): Depict the two obstacles escalating tension and teamwork.
+- Page 7 (Plot Twist): Reveal the surprising twist right when things look hardest.
+- Page 8 (Climax): Deliver the big turning-point scene with rich emotional expression and action.
+- Page 9 (Falling Action): Show the immediate joyful or touching relief after the climax.
+- Page 10 (Resolution & Reflection): Deliver the ending scene and let the theme shine naturally.
+
+ILLUSTRATION STYLE (CONSISTENT ACROSS ALL 10 PAGES):
+Use ${artStyle ? artStyle.promptArt : 'cozy hand-painted watercolor illustrations with consistent character design on every page'}.
+
+LANGUAGE & BILINGUAL DESIGN:
+${languageMode ? languageMode.promptLang : 'Write in clear, vivid English suited for a Grade 5 bilingual learner.'}
+
+AUDIO READ-ALOUD OPTIMIZATION:
+${audioVibe ? audioVibe.promptAudio : 'Write rhythmic, engaging sentences designed to sound natural and expressive when read aloud page by page.'} Keep each page concise (around 3–5 read-aloud sentences per page) so audio narration and illustrations flow smoothly together.`;
+
+        return {
+          hero, trait, setting, spark, sidekick, obs1, obs2,
+          twist, climaxAction, climaxMood, ending, theme,
+          artStyle, languageMode, audioVibe,
+          titles, chosenTitle, synopsisEn, synopsisTh, geminiPrompt
+        };
+      }
+
+      function renderStepper() {
+        const nav = document.getElementById('stepperNav');
+        const actTabs = ACTS.map((act) => {
+          const done = isActComplete(act.id);
+          const active = state.step === act.id;
+          return `
+            <button type="button"
+              class="step-tab ${active ? 'active' : ''} ${done ? 'done' : ''}"
+              data-theme="${act.id}"
+              data-step="${act.id}"
+              aria-current="${active ? 'step' : 'false'}">
+              <div class="step-tab-top">
+                <span>Act ${act.roman}</span>
+                <span class="step-check">${done ? '✓' : `${act.questions.filter(isQuestionAnswered).length}/${act.questions.length}`}</span>
+              </div>
+              <span class="step-tab-name">${act.shortName}</span>
+              <span class="step-tab-th th-text">${act.shortTh}</span>
+            </button>
+          `;
+        }).join('');
+
+        const totalDone = countAnsweredQuestions();
+        const allDone = totalDone === ALL_QUESTIONS.length;
+        const blueprintTab = `
+          <button type="button"
+            class="step-tab ${state.step === 7 ? 'active' : ''} ${allDone ? 'done' : ''}"
+            data-theme="7"
+            data-step="7"
+            aria-current="${state.step === 7 ? 'step' : 'false'}">
+            <div class="step-tab-top">
+              <span>Finish</span>
+              <span class="step-check">${allDone ? '★' : `${totalDone}/14`}</span>
+            </div>
+            <span class="step-tab-name">Story Blueprint</span>
+            <span class="step-tab-th th-text">สรุปและสร้าง Prompt</span>
+          </button>
+        `;
+
+        nav.innerHTML = actTabs + blueprintTab;
+
+        nav.querySelectorAll('.step-tab').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            stopSpeech();
+            state.step = Number(btn.dataset.step);
+            saveState();
+            renderAll();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+      }
+
+      function renderMountainAndSidebar() {
+        const answeredCount = countAnsweredQuestions();
+        document.getElementById('progressBadge').textContent = `${answeredCount} / ${ALL_QUESTIONS.length}`;
+        document.getElementById('progressBarFill').style.width = `${Math.round((answeredCount / ALL_QUESTIONS.length) * 100)}%`;
+
+        // Light up SVG Mountain Nodes
+        ACTS.forEach((act) => {
+          const node = document.getElementById(`mNode${act.id}`);
+          if (!node) return;
+          const circle = node.querySelector('circle');
+          const texts = node.querySelectorAll('text');
+          const complete = isActComplete(act.id);
+          const current = state.step === act.id;
+
+          if (complete) {
+            circle.setAttribute('fill', act.color);
+            circle.setAttribute('stroke', '#FFFFFF');
+            texts[0].setAttribute('fill', '#FFFFFF');
+            texts[1].setAttribute('fill', act.color);
+          } else if (current) {
+            circle.setAttribute('fill', '#FFFFFF');
+            circle.setAttribute('stroke', act.color);
+            texts[0].setAttribute('fill', act.color);
+            texts[1].setAttribute('fill', act.color);
+          } else {
+            circle.setAttribute('fill', '#FFFFFF');
+            circle.setAttribute('stroke', '#94A3B8');
+            texts[0].setAttribute('fill', '#475569');
+            texts[1].setAttribute('fill', '#475569');
+          }
+        });
+
+        // Recipe List
+        const listEl = document.getElementById('recipeList');
+        listEl.innerHTML = ALL_QUESTIONS.map((q) => {
+          const val = state.answers[q.id];
+          let displayHtml = '<span class="recipe-empty">Not chosen yet...</span>';
+          let filled = false;
+
+          if (q.type === 'single' && val) {
+            const opt = getOption(q.id, val);
+            if (opt) {
+              filled = true;
+              displayHtml = `<span class="recipe-value">${opt.emoji} ${opt.title}</span>`;
+            }
+          } else if (q.type === 'multi' && Array.isArray(val) && val.length > 0) {
+            const opts = val.map((id) => getOption(q.id, id)).filter(Boolean);
+            if (opts.length > 0) {
+              filled = opts.length === q.maxSelect;
+              displayHtml = `<span class="recipe-value">${opts.map((o) => `${o.emoji} ${o.storyShort || o.title}`).join(' + ')}</span>`;
+            }
+          }
+
+          return `
+            <div class="recipe-item ${filled ? 'filled' : ''}" data-jump-act="${q.actId}" role="button" tabindex="0" title="Click to edit Question ${q.num}">
+              <span class="recipe-dot" data-act="${q.actId}"></span>
+              <div>
+                <div class="recipe-label">Q${q.num} &bull; ${q.shortLabel}</div>
+                ${displayHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        listEl.querySelectorAll('.recipe-item').forEach((item) => {
+          const go = () => {
+            stopSpeech();
+            state.step = Number(item.dataset.jumpAct);
+            saveState();
+            renderAll();
+          };
+          item.addEventListener('click', go);
+          item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              go();
+            }
+          });
+        });
+      }
+
+      function renderActStage(act) {
+        const stage = document.getElementById('mainStage');
+        const questionsHtml = act.questions.map((q) => {
+          const isMulti = q.type === 'multi';
+          const selectedVal = state.answers[q.id];
+          const selectedArr = isMulti ? (Array.isArray(selectedVal) ? selectedVal : []) : (selectedVal ? [selectedVal] : []);
+          const satisfied = isQuestionAnswered(q);
+          const ruleLabel = isMulti
+            ? `${selectedArr.length} / ${q.maxSelect} Picked`
+            : (satisfied ? '✓ Picked 1' : 'Pick 1 Option');
+
+          const optionsHtml = q.options.map((opt) => {
+            const isSelected = selectedArr.includes(opt.id);
+            return `
+              <button type="button"
+                class="option-card ${isSelected ? 'selected' : ''}"
+                data-qid="${q.id}"
+                data-optid="${opt.id}"
+                role="${isMulti ? 'checkbox' : 'radio'}"
+                aria-checked="${isSelected ? 'true' : 'false'}">
+                <div class="option-top">
+                  <span class="option-emoji" aria-hidden="true">${opt.emoji}</span>
+                  <span class="option-check" aria-hidden="true">${isSelected ? '✓' : ''}</span>
+                </div>
+                <div class="option-title">${opt.title}</div>
+                <div class="option-desc">${opt.desc}</div>
+                <div class="option-th th-text">${opt.th}</div>
+              </button>
+            `;
+          }).join('');
+
+          return `
+            <article class="question-block">
+              <div class="question-header">
+                <div class="question-title-wrap">
+                  <span class="question-num">Q${q.num}</span>
+                  <div>
+                    <h3 class="question-en">${q.promptEn}</h3>
+                    <p class="question-th th-text">${q.promptTh}</p>
+                  </div>
+                </div>
+                <span class="rule-pill ${satisfied ? 'satisfied' : ''}">${ruleLabel}</span>
+              </div>
+              <div class="inline-alert ${activeAlertQuestionId === q.id ? 'show' : ''}">
+                You already picked 2 obstacles! Click a selected card first if you want to swap it.
+                <span class="th-text">(คุณเลือกครบ 2 ข้อแล้ว! กดยกเลิก 1 ข้อก่อนเพื่อเปลี่ยนตัวเลือกใหม่)</span>
+              </div>
+              <div class="options-grid">
+                ${optionsHtml}
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        stage.innerHTML = `
+          <div class="theme-${act.id}">
+            <div class="stage-banner theme-${act.id}">
+              <div style="flex: 1; min-width: 240px;">
+                <span class="act-badge">${act.badge}</span>
+                <h2 class="stage-title">${act.title}</h2>
+                <p class="stage-desc">
+                  ${act.descEn}
+                  <span class="th-text">${act.descTh}</span>
+                </p>
+              </div>
+              <div class="stage-actions">
+                <button type="button" class="btn btn-sm" id="btnReadAct" title="Listen to these questions in English">
+                  🔊 Listen
+                </button>
+                <button type="button" class="btn btn-sm" id="btnSpinAct" title="Randomize choices for this Act">
+                  🎲 Spin Act ${act.roman}
+                </button>
+              </div>
+            </div>
+
+            ${questionsHtml}
+
+            <div class="stage-footer">
+              <div>
+                ${act.id > 1
+                  ? `<button type="button" class="btn" id="btnPrevStep">← Back to Act ${ACTS[act.id - 2].roman}</button>`
+                  : `<span style="font-size: 0.9rem; color: var(--ink-muted); font-style: italic;">Step ${act.id} of 6 &bull; Take your time and have fun!</span>`
+                }
+              </div>
+              <div>
+                ${act.id < 6
+                  ? `<button type="button" class="btn btn-primary" id="btnNextStep">Next: Act ${ACTS[act.id].roman} (${ACTS[act.id].shortName}) →</button>`
+                  : `<button type="button" class="btn btn-vivid" id="btnNextStep">✨ Reveal My Gemini Storybook Blueprint →</button>`
+                }
+              </div>
+            </div>
+          </div>
+        `;
+
+        stage.querySelectorAll('.option-card').forEach((card) => {
+          card.addEventListener('click', () => {
+            selectOption(card.dataset.qid, card.dataset.optid);
+          });
+        });
+
+        document.getElementById('btnReadAct').addEventListener('click', () => {
+          const textToRead = `${act.title}. ` + act.questions.map((q) => `Question ${q.num}: ${q.promptEn}`).join(' ');
+          speakText(textToRead);
+        });
+
+        document.getElementById('btnSpinAct').addEventListener('click', () => randomizeAct(act.id));
+
+        const prevBtn = document.getElementById('btnPrevStep');
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            stopSpeech();
+            state.step = act.id - 1;
+            saveState();
+            renderAll();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+
+        document.getElementById('btnNextStep').addEventListener('click', () => {
+          stopSpeech();
+          state.step = act.id + 1;
+          saveState();
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      function renderBlueprintStage() {
+        const stage = document.getElementById('mainStage');
+        const missing = getMissingQuestions();
+        const data = buildStoryData();
+
+        const missingHtml = missing.length > 0 ? `
+          <div class="missing-banner">
+            <h3>Almost Done! ${missing.length} plot decision${missing.length > 1 ? 's' : ''} still need your choice:
+              <span class="th-text" style="font-weight: normal;">(ยังเหลืออีก ${missing.length} ข้อที่ยังไม่ได้เลือก)</span>
+            </h3>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;">
+              <div class="missing-chips">
+                ${missing.map((q) => `
+                  <button type="button" class="missing-chip" data-jump="${q.actId}">
+                    Q${q.num}: ${q.shortLabel} →
+                  </button>
+                `).join('')}
+              </div>
+              <button type="button" class="btn btn-sm" id="btnAutoFillMissing">🎲 Auto-Fill Missing</button>
+            </div>
+          </div>
+        ` : '';
+
+        const titlePickerHtml = `
+          <div class="title-picker-box">
+            <h3>Choose Your Official Book Title!
+              <span class="th-text" style="font-size: 0.95rem; font-weight: normal; color: var(--ink-muted);">(เลือกชื่อเรื่องอย่างเป็นทางการของหนังสือคุณ)</span>
+            </h3>
+            <div class="title-options">
+              ${data.titles.map((t, idx) => `
+                <button type="button" class="title-card ${state.selectedTitleIdx === idx ? 'selected' : ''}" data-title-idx="${idx}">
+                  <div class="title-card-main">${t.en}</div>
+                  <div class="title-card-sub th-text">${t.th}</div>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+
+        stage.innerHTML = `
+          <div class="theme-7">
+            <div class="stage-banner theme-7">
+              <div style="flex: 1; min-width: 240px;">
+                <span class="act-badge">Final Studio &bull; Ready for Gemini Storybook Audio</span>
+                <h2 class="stage-title">Your Grade 5 Story Plot Blueprint</h2>
+                <p class="stage-desc">
+                  Review your 5-Act Plot Certificate, hear an instant read-aloud preview, and copy your prompt into Google Gemini Storybook!
+                  <span class="th-text">ตรวจสอบโครงเรื่อง 5 องก์ ทดลองฟังเสียงอ่านตัวอย่าง และคัดลอกคำสั่งไปสร้างนิทานเสียง 10 หน้าใน Gemini!</span>
+                </p>
+              </div>
+              <div class="stage-actions no-print">
+                <button type="button" class="btn btn-sm" id="btnListenPreview">🔊 Preview Audio</button>
+                <button type="button" class="btn btn-sm" id="btnStopPreview">⏹ Stop</button>
+                <button type="button" class="btn btn-sm" id="btnPrintSheet">🖨️ Print / Save PDF</button>
+              </div>
+            </div>
+
+            ${missingHtml}
+            ${titlePickerHtml}
+
+            <div class="certificate-sheet">
+              <div class="certificate-header">
+                <div class="certificate-kicker">Grade 5 Bilingual Literary Architect &bull; Official Plot Blueprint</div>
+                <h3 class="certificate-title">${data.chosenTitle.en}</h3>
+                <div class="th-text" style="color: var(--ink-muted); font-size: 0.98rem;">${data.chosenTitle.th}</div>
+              </div>
+
+              <div class="synopsis-box">
+                <strong>Plot Synopsis Preview:</strong> ${data.synopsisEn}
+                <div class="synopsis-th th-text">${data.synopsisTh}</div>
+              </div>
+
+              <div class="arc-grid">
+                <div class="arc-cell">
+                  <strong style="color: var(--act1);">Act I &bull; Hero &amp; Setting</strong>
+                  <span>${data.hero ? `${data.hero.emoji} ${data.hero.title}` : '—'}<br/>${data.setting ? `${data.setting.emoji} ${data.setting.title}` : '—'}</span>
+                </div>
+                <div class="arc-cell">
+                  <strong style="color: var(--act2);">Act II &bull; Spark &amp; Sidekick</strong>
+                  <span>${data.spark ? `${data.spark.emoji} ${data.spark.title}` : '—'}<br/>${data.sidekick ? `${data.sidekick.emoji} ${data.sidekick.title}` : '—'}</span>
+                </div>
+                <div class="arc-cell">
+                  <strong style="color: var(--act3);">Act III &bull; Obstacles &amp; Twist</strong>
+                  <span>${data.obs1 ? `${data.obs1.emoji} ${data.obs1.storyShort}` : '—'} &amp; ${data.obs2 ? `${data.obs2.emoji} ${data.obs2.storyShort}` : '—'}<br/>${data.twist ? `${data.twist.emoji} ${data.twist.title}` : '—'}</span>
+                </div>
+                <div class="arc-cell">
+                  <strong style="color: var(--act4);">Act IV &bull; Climax Turning Point</strong>
+                  <span>${data.climaxAction ? `${data.climaxAction.emoji} ${data.climaxAction.title}` : '—'}<br/>${data.climaxMood ? `${data.climaxMood.emoji} ${data.climaxMood.title}` : '—'}</span>
+                </div>
+                <div class="arc-cell">
+                  <strong style="color: var(--act5);">Act V &bull; Ending &amp; Theme</strong>
+                  <span>${data.ending ? `${data.ending.emoji} ${data.ending.title}` : '—'}<br/>${data.theme ? `${data.theme.emoji} ${data.theme.title}` : '—'}</span>
+                </div>
+                <div class="arc-cell">
+                  <strong style="color: var(--act6);">Act VI &bull; Gemini Art &amp; Audio</strong>
+                  <span>${data.artStyle ? `${data.artStyle.emoji} ${data.artStyle.title}` : '—'}<br/>${data.audioVibe ? `${data.audioVibe.emoji} ${data.audioVibe.title}` : '—'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="prompt-studio">
+              <div class="prompt-studio-header">
+                <div>
+                  <h3>✨ Ready-to-Paste Gemini Storybook Prompt</h3>
+                  <div style="font-size: 0.88rem; color: #CBD5E1;">
+                    Designed for Gemini's 10-page Illustrated Storybook with Built-in Audio Read-Aloud
+                    <span class="th-text">(พร้อมนำไปวางใน Gemini Storybook เพื่อสร้างภาพและเสียงอ่าน)</span>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;" class="no-print">
+                  <button type="button" class="btn btn-emerald btn-sm" id="btnCopyPrompt">📋 Copy Prompt</button>
+                  <button type="button" class="btn btn-sm" id="btnDownloadTxt">⬇ Download .txt</button>
+                </div>
+              </div>
+              <textarea class="prompt-textarea" id="geminiPromptBox" readonly aria-label="Generated Gemini Storybook prompt"></textarea>
+            </div>
+
+            <div class="howto-strip">
+              <div class="howto-step">
+                <strong>1. Copy Your Prompt</strong>
+                Click <em>"Copy Prompt"</em> above to copy all 10-page instructions.
+                <span class="th-text" style="display:block; font-size:0.84rem;">คลิก "Copy Prompt" เพื่อคัดลอกคำสั่ง</span>
+              </div>
+              <div class="howto-step">
+                <strong>2. Open Gemini Storybook</strong>
+                Open Gemini and select the <em>Storybook</em> Gem (or paste right into chat).
+                <span class="th-text" style="display:block; font-size:0.84rem;">เปิด Gemini แล้วเลือก Storybook Gem</span>
+              </div>
+              <div class="howto-step">
+                <strong>3. Press Play on Audio!</strong>
+                Once Gemini builds your 10 illustrated pages, tap <em>Play</em> to hear your story aloud!
+                <span class="th-text" style="display:block; font-size:0.84rem;">กด Play เพื่อฟังเสียงเล่านิทานทั้ง 10 หน้า!</span>
+              </div>
+            </div>
+
+            <div class="stage-footer no-print">
+              <button type="button" class="btn" id="btnBackToAct6">← Back to Act VI (Audio &amp; Art)</button>
+              <button type="button" class="btn btn-primary" id="btnCopyPromptBottom">📋 Copy Gemini Storybook Prompt</button>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('geminiPromptBox').value = data.geminiPrompt;
+
+        stage.querySelectorAll('.missing-chip').forEach((chip) => {
+          chip.addEventListener('click', () => {
+            state.step = Number(chip.dataset.jump);
+            saveState();
+            renderAll();
+          });
+        });
+
+        const autoFillBtn = document.getElementById('btnAutoFillMissing');
+        if (autoFillBtn) {
+          autoFillBtn.addEventListener('click', () => {
+            missing.forEach((q) => {
+              if (q.type === 'single') {
+                state.answers[q.id] = q.options[Math.floor(Math.random() * q.options.length)].id;
+              } else {
+                const current = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]] : [];
+                const remaining = q.options.filter((o) => !current.includes(o.id));
+                while (current.length < q.maxSelect && remaining.length > 0) {
+                  const idx = Math.floor(Math.random() * remaining.length);
+                  current.push(remaining.splice(idx, 1)[0].id);
+                }
+                state.answers[q.id] = current;
+              }
+            });
+            saveState();
+            renderAll();
+            showToast('Filled missing plot blocks! Review or edit anything you like.');
+          });
+        }
+
+        stage.querySelectorAll('.title-card').forEach((card) => {
+          card.addEventListener('click', () => {
+            state.selectedTitleIdx = Number(card.dataset.titleIdx);
+            saveState();
+            renderAll();
+          });
+        });
+
+        const copyPrompt = async () => {
+          const text = document.getElementById('geminiPromptBox').value;
+          try {
+            await navigator.clipboard.writeText(text);
+            showToast('Copied! Now paste it into Gemini Storybook.');
+          } catch (e) {
+            const box = document.getElementById('geminiPromptBox');
+            box.select();
+            document.execCommand('copy');
+            showToast('Prompt copied to clipboard!');
+          }
+        };
+
+        document.getElementById('btnCopyPrompt').addEventListener('click', copyPrompt);
+        document.getElementById('btnCopyPromptBottom').addEventListener('click', copyPrompt);
+
+        document.getElementById('btnDownloadTxt').addEventListener('click', () => {
+          const text = document.getElementById('geminiPromptBox').value;
+          const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${data.chosenTitle.en.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-gemini-storybook-prompt.txt`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('Downloaded .txt blueprint!');
+        });
+
+        document.getElementById('btnListenPreview').addEventListener('click', () => {
+          speakText(`${data.chosenTitle.en}. ${data.synopsisEn}`);
+        });
+
+        document.getElementById('btnStopPreview').addEventListener('click', () => {
+          stopSpeech();
+          showToast('Audio preview stopped.');
+        });
+
+        document.getElementById('btnPrintSheet').addEventListener('click', () => {
+          window.print();
+        });
+
+        document.getElementById('btnBackToAct6').addEventListener('click', () => {
+          stopSpeech();
+          state.step = 6;
+          saveState();
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      function applyLanguageClass() {
+        document.body.classList.remove('lang-bilingual', 'lang-en');
+        document.body.classList.add(state.langMode === 'en' ? 'lang-en' : 'lang-bilingual');
+        document.querySelectorAll('.lang-pill').forEach((pill) => {
+          pill.classList.toggle('active', pill.dataset.lang === state.langMode);
+        });
+      }
+
+      function renderAll() {
+        applyLanguageClass();
+        renderStepper();
+        renderMountainAndSidebar();
+
+        if (state.step >= 1 && state.step <= 6) {
+          const act = ACTS.find((a) => a.id === state.step) || ACTS[0];
+          renderActStage(act);
+        } else {
+          renderBlueprintStage();
+        }
+      }
+
+      // Global Controls
+      document.querySelectorAll('.lang-pill').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.langMode = btn.dataset.lang;
+          saveState();
+          renderAll();
+        });
+      });
+
+      document.getElementById('btnRandomAll').addEventListener('click', randomizeAll);
+
+      document.getElementById('btnReset').addEventListener('click', () => {
+        stopSpeech();
+        const langKeep = state.langMode;
+        state = createEmptyState();
+        state.langMode = langKeep;
+        activeAlertQuestionId = null;
+        saveState();
+        renderAll();
+        showToast('Started a brand-new story plot!');
+      });
+
+      document.getElementById('btnJumpBlueprint').addEventListener('click', () => {
+        stopSpeech();
+        state.step = 7;
+        saveState();
+        renderAll();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Preload speech voices on browsers that populate asynchronously
+      if ('speechSynthesis' in window && typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+      }
+
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
